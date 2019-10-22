@@ -82852,6 +82852,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b25c577916d2a847aab733a121f9f10, type: 3}
+--- !u!114 &1401889295810134259 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9081647176645059551, guid: 2b25c577916d2a847aab733a121f9f10,
+    type: 3}
+  m_PrefabInstance: {fileID: 1401889295810134258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff2fca8469b6564c8649f4624324840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1645082517753750523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83270,6 +83282,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: spawnPoints.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: spawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1401889295810134259}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe, type: 3}
 --- !u!1001 &3296216599248613335
