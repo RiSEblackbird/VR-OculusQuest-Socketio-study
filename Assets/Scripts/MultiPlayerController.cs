@@ -4,80 +4,62 @@ using UnityEngine;
 
 public class MultiPlayerController : MonoBehaviour
 {
-    // private CharacterController Controller;
-    // private Vector3 MoveThrottle = Vector3.zero;
-
-    [SerializeField]
-    Transform Head = null;
-    public const float Angle = 1f;
-    public const float DashSpeed = 5f;
-    public const float SlowSpeed = 1.5f;
-    // public const float JumpPower = 50f;
-
-    void Start()
-    {
-        // Controller = GetComponent<CharacterController>();
-        // MoveThrottle = Vector3.zero;
-    }
+    public float Angle = 1f;
+    public float DashSpeed = 5f;
+    public float SlowSpeed = 1.5f;
+    
+    // リアルタイム通信向けのパラメーター
+    Transform oldHead = null;
+    Transform currentHead = null;
+    Vector3 oldPosition;
+    Vector3 currentPosition;
+    Quaternion oldRotation;
+    Quaternion currentRotaion;
 
     void Reset()
     {
-        Head = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
+        oldHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
+        oldPosition = transform.position;
+        oldRotation = transform.rotation;
     }
 
-    float Scale
+    void Start()
     {
-        get
-        {
-            return IsPressTrigger ? DashSpeed : IsPressGrip ? SlowSpeed : 1.5f;
-        }
+        currentHead = oldHead;
+        currentPosition = oldPosition;
+        currentRotaion = oldRotation;
     }
-
-    bool IsPressTrigger
-    {
-        get
-        {
-            return Input.GetKey(KeyCode.LeftShift);
-        }
-    }
-    bool IsPressGrip
-    {
-        get
-        {
-            return Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.LeftAlt);
-        }
-    }
-
+    
     void Update()
     {
         // Forward move
         if (Input.GetKey(KeyCode.W) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
         {
-            var forward = Head.forward;
+            var forward = oldHead.forward;
             forward.y = 0;
-            transform.position += forward.normalized * Time.deltaTime * Scale;
+            transform.position += forward.normalized * Time.deltaTime;
         }
         // Back move
         if (Input.GetKey(KeyCode.S) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickDown))
         {
-            var forward = Head.forward;
+            var forward = oldHead.forward;
             forward.y = 0;
-            transform.position -= forward.normalized * Time.deltaTime * Scale;
+            transform.position -= forward.normalized * Time.deltaTime;
         }
 
         // 追記：Left move
         if (Input.GetKey(KeyCode.A) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickLeft))
         {
-            var right = Head.right;
+            var right = oldHead.right;
             right.y = 0;
-            transform.position -= right.normalized * Time.deltaTime * Scale;
+            transform.position -= right.normalized * Time.deltaTime;
         }
         // 追記：Right move
         if (Input.GetKey(KeyCode.D) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickRight))
         {
-            var right = Head.right;
+            var right = oldHead.right;
             right.y = 0;
-            transform.position += right.normalized * Time.deltaTime * Scale;
+            transform.position += right.normalized * Time.deltaTime;
         }
 
         // Left rotate
@@ -90,23 +72,6 @@ public class MultiPlayerController : MonoBehaviour
         {
             transform.Rotate(new Vector3(0, Angle, 0));
         }
-
-        /* 追記：Jump simple 保留
-        if (Controller.isGrounded)
-        {
-            MoveThrottle = Vector3.zero;
-        }
-
-        if (Input.GetKey(KeyCode.B) || OVRInput.Get(OVRInput.Button.SecondaryThumbstick) || OVRInput.Get(OVRInput.Button.Two))
-        { 
-            MoveThrottle += new Vector3(0, JumpPower, 0);
-        }
-        else
-        {
-            MoveThrottle += new Vector3(0, -10f, 0);
-        }
-        */
-
+        
     }
-}
 }
