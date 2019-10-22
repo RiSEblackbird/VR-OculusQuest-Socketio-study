@@ -7,6 +7,7 @@ public class MultiPlayerController : MonoBehaviour
     public float Angle = 1f;
     public float DashSpeed = 5f;
     public float SlowSpeed = 1.5f;
+    public bool isLocalPlayer = false;
     
     // リアルタイム通信向けのパラメーター
     Transform oldHead = null;
@@ -32,6 +33,31 @@ public class MultiPlayerController : MonoBehaviour
     
     void Update()
     {
+        // キャラクターが自分であること
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
+        currentPosition = transform.position;
+        currentRotaion = transform.rotation;
+
+        if (currentPosition != oldPosition)
+        {
+            oldPosition = currentPosition;
+        }
+
+        if (currentRotaion != oldRotation)
+        {
+            oldRotation = currentRotaion;
+        }
+
+        if (currentHead != oldHead)
+        {
+            oldHead = currentHead;
+        }
+
         // Forward move
         if (Input.GetKey(KeyCode.W) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
         {
