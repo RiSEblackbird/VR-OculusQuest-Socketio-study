@@ -1,6 +1,6 @@
 # VR-OculusQuest-Socketio-study  
 
-基本的に下記掲載の動画のチュートリアルに沿って進める。
+基本的に下記掲載の動画のチュートリアルに沿って進める。  
 
 ## Reference tutorial
 ### **Unity 5 Multiplayer Networking Node JS socket.io Pt1**  
@@ -19,9 +19,11 @@
  - 各種JSONの定義(プレイヤーや敵の位置、体力、射撃など)　※現状自環境ではプレイヤーの位置関係のみ実装。
  https://www.youtube.com/watch?v=oYucBRfjyRE  
 
-### **~Pt9**
+### **~Pt9,Pt10**
  - node.js, expressでゲームサーバーを立てる  
+ - 通信する、接続、切断、プレイヤーの移動、回転、敵キャラ、体力などのJSON定義  
  https://www.youtube.com/watch?v=HKyl2wSShFM  
+ https://www.youtube.com/watch?v=qx_zEFeMtvA  
 
 ## Reference articles  
 **C#, IEnumeratorとIEnumerableを調べた**  
@@ -47,4 +49,10 @@
 
 **Unique id generator in javascript**  
  https://learnersbucket.com/examples/javascript/unique-id-generator-in-javascript/  
+
+**厳密非等価演算子 ---「分かりそう」で「分からない」でも「分かった」気になれるIT用語辞典**  
+https://wa3.i-3-i.info/word17940.html  
+
+**Array.prototype.splice()**  
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/splice  
 

@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
 // 通信について
 io.on('connection', function(socket){
 
-    var currentPlyer = {};
+    var currentPlayer = {};
     currentPlayer.neme = 'unknown';
 
     // ①プレイヤーの接続
@@ -39,7 +39,7 @@ io.on('connection', function(socket){
         console.log(currentPlayer.name + 'recv: play: ' + JSON.stringify(data));
 
         // 既存のクライアントがいない場合
-        if(clients.length == 0) {
+        if(clients.length === 0) {
             playerSpawnerPoints = [];
             data.playerSpawnerPoints.forEach(function(_playerSpawnPoint) {
                 var playerSpawnerPoint = {
@@ -65,24 +65,38 @@ io.on('connection', function(socket){
         // クライアントの列に現在接続したプレイヤーを加える
         clients.push(currentPlayer);
         // 現在入っているプレイヤーを出力
-        console.log(currentPlyer.name + ' emit: play: ' + JSON.stringify(currentPlyer));
+        console.log(currentPlayer.name + ' emit: play: ' + JSON.stringify(currentPlayer));
         // 既にいるプレイヤー達に自分が入ったことを伝える
-        socket.broadcast.emit('other player connected', currentPlyer);
+        socket.broadcast.emit('other player connected', currentPlayer);
     });
 
     // ③プレイヤーの移動
     socket.on('player move', function(data) {
         console.log('recv: move: '+JSON.stringify(data));
-        currentPlyer.position = data.position;
-        socket.broadcast.emit('player move', currentPlyer);
+        currentPlayer.position = data.position;
+        socket.broadcast.emit('player move', currentPlayer);
     });
 
     // ④プレイヤーの回転
     socket.on('player turn', function(data) {
         console.log('recv: turn: '+JSON.stringify(data));
-        currentPlyer.rotation = data.rotation;
-        socket.broadcast.emit('player turn', currentPlyer);
-    })
+        currentPlayer.rotation = data.rotation;
+        socket.broadcast.emit('player turn', currentPlayer);
+    });
+
+    // ⑤プレイヤーの接続解除
+    socket.on('disconnect', function()
+    {
+        console.log(currentPlayer.name+' recv: disconnect' +currentPlayer.name);
+        socket.broadcast.emit('other player disconnected', currentPlayer);
+        console.log(currentPlayer.name+' bcst: other player disconnected ' +JSON.stringify(currentPlayer));
+        // クライアント一覧から、離脱者のみを消去する
+        for(var i=0; i<clients.length; i++) {
+            if(clients[i].name === currentPlayer.name) {
+                clients.splice(i,1);
+            }
+        }
+    });
 });
 
 console.log('server is running...' + guid());
