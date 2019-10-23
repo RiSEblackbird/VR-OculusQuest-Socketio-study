@@ -20,8 +20,8 @@
  https://www.youtube.com/watch?v=oYucBRfjyRE  
 
 ### **~Pt9**
- - node.js, expressでゲームサーバーを立てる
- https://www.youtube.com/watch?v=HKyl2wSShFM
+ - node.js, expressでゲームサーバーを立てる  
+ https://www.youtube.com/watch?v=HKyl2wSShFM  
 
 ## Reference articles  
 **C#, IEnumeratorとIEnumerableを調べた**  

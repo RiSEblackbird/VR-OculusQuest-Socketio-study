@@ -18,7 +18,7 @@ io.on('connection', function(socket){
     var currentPlyer = {};
     currentPlayer.neme = 'unknown';
 
-    // ①Player接続
+    // ①プレイヤーの接続
     socket.on('player connect', function(){
         console.log(currentPlayer.name + ' recv: player connect');
         // すべてのクライアントについて名前と位置と回転を定義
@@ -69,6 +69,20 @@ io.on('connection', function(socket){
         // 既にいるプレイヤー達に自分が入ったことを伝える
         socket.broadcast.emit('other player connected', currentPlyer);
     });
+
+    // ③プレイヤーの移動
+    socket.on('player move', function(data) {
+        console.log('recv: move: '+JSON.stringify(data));
+        currentPlyer.position = data.position;
+        socket.broadcast.emit('player move', currentPlyer);
+    });
+
+    // ④プレイヤーの回転
+    socket.on('player turn', function(data) {
+        console.log('recv: turn: '+JSON.stringify(data));
+        currentPlyer.rotation = data.rotation;
+        socket.broadcast.emit('player turn', currentPlyer);
+    })
 });
 
 console.log('server is running...' + guid());
