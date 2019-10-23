@@ -37,6 +37,7 @@ public class NetworkManager : MonoBehaviour
 
     #region Commands
 
+
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
@@ -71,9 +72,70 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class PointJSON
     {
+        public float[] position;
+        public float[] rotation;
         public PointJSON(SpawnPoint spawnPoint)
         {
+            position = new float[]
+            {
+                spawnPoint.transform.position.x,
+                spawnPoint.transform.position.y,
+                spawnPoint.transform.position.z
+            };
 
+            rotation = new float[]
+            {
+                spawnPoint.transform.eulerAngles.x,
+                spawnPoint.transform.eulerAngles.y,
+                spawnPoint.transform.eulerAngles.z
+            };
+        }
+    }
+
+    [Serializable]
+    public class PositionJSON
+    {
+        public float[] position;
+
+        public PositionJSON(Vector3 _position)
+        {
+            position = new float[] { _position.x, _position.y, _position.z };
+         }
+    }
+
+    [Serializable]
+    public class RotationJSON
+    {
+        public float[] rotation;
+
+        public RotationJSON(Quaternion _rotation)
+        {
+            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
+        }
+    }
+
+    [Serializable]
+    public class UserJSON
+    {
+        public string name;
+        public float[] postition;
+        public float[] rotation;
+        // public int health; 体力など定義あれば。
+
+        public static UserJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UserJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class EnemiesJSON
+    {
+        public List<UserJSON> enemies;
+
+        public static EnemiesJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<EnemiesJSON>(data);
         }
     }
 
