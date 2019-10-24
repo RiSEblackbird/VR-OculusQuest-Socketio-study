@@ -38,25 +38,30 @@ public class MultiPlayerController : MonoBehaviour
         {
             return;
         }
-
+        
         currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
         currentPosition = transform.position;
         currentRotaion = transform.rotation;
 
         if (currentPosition != oldPosition)
         {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandMove(transform.position);
             oldPosition = currentPosition;
         }
 
         if (currentRotaion != oldRotation)
         {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandTurn(transform.rotation);
             oldRotation = currentRotaion;
         }
-
+        
+        /*
         if (currentHead != oldHead)
         {
+            NetworkManager.instance.GetComponent<NetworkManager>().
             oldHead = currentHead;
         }
+        */
 
         // Forward move
         if (Input.GetKey(KeyCode.W) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
@@ -65,6 +70,7 @@ public class MultiPlayerController : MonoBehaviour
             forward.y = 0;
             transform.position += forward.normalized * Time.deltaTime;
         }
+        
         // Back move
         if (Input.GetKey(KeyCode.S) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickDown))
         {
