@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    public List<SpawnPoint> spawnPoints;
+    public List<SpawnPoint> playerSpawnPoints;
 }
