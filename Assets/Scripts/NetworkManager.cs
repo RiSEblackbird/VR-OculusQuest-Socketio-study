@@ -99,7 +99,7 @@ public class NetworkManager : MonoBehaviour
         UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
         Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
         Quaternion rotation = Quaternion.Euler(currentUserJSON.rotation[0], currentUserJSON.rotation[1], currentUserJSON.rotation[2]);
-        GameObject p = GameObject.Find(currentUserJSON.name) as GameObject;
+        GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t1 = p.transform.Find("Player Name"); 
         Text playerName = t1.GetComponent<Text>();
