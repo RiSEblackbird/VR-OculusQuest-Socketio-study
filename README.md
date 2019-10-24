@@ -56,3 +56,7 @@ https://wa3.i-3-i.info/word17940.html
 **Array.prototype.splice()**  
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/splice  
 
+**Unity入門】Instantiateを使いこなそう!使い方・使用例まとめ!**  
+https://www.sejuku.net/blog/48180  
+
+

@@ -27,10 +27,14 @@ public class NetworkManager : MonoBehaviour
     
     void Start()
     {
-        
+        // socket.On("enemies", OnEnemies);
+        socket.On("other player connected", OnOtherPlayerConnected);
+        socket.On("play", OnPlay);
+        socket.On("player move", OnPlayerMove);
+        socket.On("player turn", OnPlayerTurn);
+        socket.On("other player disconnected", OnOtherPlayerDisconnected);
     }
 
-    
     public void JoinGame()
     {
         StartCoroutine(ConnectToServer());
@@ -38,15 +42,83 @@ public class NetworkManager : MonoBehaviour
 
     #region Commands
 
-
+    // プレイヤー接続
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
-    }
+
+        socket.Emit("Player connect");
+
+        yield return new WaitForSeconds(1f);
+
+        string playerName = playerNameInput.text;
+        List<SpawnPoint> playerSpawnPoints = GetComponent<PlayerSpawner>().playerSpawnPoints;
+        // List<SpawnPoint> enemySpawnPoints = ...
+        PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints);
+        string data = JsonUtility.ToJson(playerJSON);
+        socket.Emit("play", new JSONObject(data));
+        canvas.gameObject.SetActive(false);
+     }
 
     #endregion
 
     #region Listening
+
+    void OnOtherPlayerConnected(SocketIOEvent socketIOEvent)
+    {
+        print("Someone else Joined ");
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Vector3 position = new Vector3(userJSON.position[0], userJSON.position[1], userJSON.position[2]);
+        Quaternion rotation = Quaternion.Euler(userJSON.rotation[0], userJSON.rotation[1], userJSON.rotation[2]);
+        GameObject o = GameObject.Find(userJSON.name) as GameObject;
+        if (o != null)
+        {
+            return;
+        }
+        GameObject p = Instantiate(player, position, rotation) as GameObject;
+        MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
+        // Transform t = p.transform.Find("Healthbar Canvas");
+        Transform t1 = p.transform.Find("Player Name"); // 動画ではt.transform~~だがヘルスバー未実装なため"p"からタグを探させる。
+        Text playerName = t1.GetComponent<Text>();
+        playerName.text = userJSON.name;
+        pc.isLocalPlayer = false;
+        p.name = userJSON.name;
+        // Health h = p.GetComponent<Health>;
+        // h.currentHealth = userJSON.health;
+        // h.OnChangeHealth();
+    }
+
+    void OnPlay(SocketIOEvent socketIOEvent)
+    {
+        print("you joined");
+        string data = socketIOEvent.data.ToString();
+        UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
+        Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
+        Quaternion rotation = Quaternion.Euler(currentUserJSON.rotation[0], currentUserJSON.rotation[1], currentUserJSON.rotation[2]);
+        GameObject p = GameObject.Find(currentUserJSON.name) as GameObject;
+        MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
+        Transform t1 = p.transform.Find("Player Name"); 
+        Text playerName = t1.GetComponent<Text>();
+        playerName.text = currentUserJSON.name;
+        pc.isLocalPlayer = false;
+        p.name = currentUserJSON.name;
+    }
+
+    void OnPlayerMove(SocketIOEvent socketIOEvent)
+    {
+
+    }
+
+    void OnPlayerTurn(SocketIOEvent socketIOEvent)
+    {
+
+    }
+    void OnOtherPlayerDisconnected(SocketIOEvent socketIOEvent)
+    {
+
+    }
+    
 
     #endregion
 
@@ -58,11 +130,11 @@ public class NetworkManager : MonoBehaviour
         public string name;
         public List<PointJSON> playersSpawnPoints;
         
-        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoint)
+        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints)
         {
             playersSpawnPoints = new List<PointJSON>();
             name = _name;
-            foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoint)
+            foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(playerSpawnPoint);
                 playersSpawnPoints.Add(pointJSON);
@@ -119,7 +191,7 @@ public class NetworkManager : MonoBehaviour
     public class UserJSON
     {
         public string name;
-        public float[] postition;
+        public float[] position;
         public float[] rotation;
         // public int health; 体力など定義あれば。
 
