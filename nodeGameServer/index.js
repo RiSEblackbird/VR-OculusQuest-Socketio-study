@@ -16,7 +16,7 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket){
 
     var currentPlayer = {};
-    currentPlayer.neme = 'unknown';
+    currentPlayer.name = 'unknown';
 
     // ①プレイヤーの接続
     socket.on('player connect', function(){
@@ -88,7 +88,7 @@ io.on('connection', function(socket){
     // ⑤プレイヤーの接続解除
     socket.on('disconnect', function()
     {
-        console.log(currentPlayer.name+' recv: disconnect' +currentPlayer.name);
+        console.log(currentPlayer.name+' recv: disconnect ' +currentPlayer.name);
         socket.broadcast.emit('other player disconnected', currentPlayer);
         console.log(currentPlayer.name+' bcst: other player disconnected ' +JSON.stringify(currentPlayer));
         // クライアント一覧から、離脱者のみを消去する
