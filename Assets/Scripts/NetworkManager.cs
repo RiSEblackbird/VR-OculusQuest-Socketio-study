@@ -12,6 +12,7 @@ public class NetworkManager : MonoBehaviour
     public SocketIOComponent socket;
     public InputField playerNameInput;
     public GameObject player;
+    public GameObject startMenuCamera;
 
     void Awake()
     {
@@ -53,11 +54,13 @@ public class NetworkManager : MonoBehaviour
 
         string playerName = playerNameInput.text;
         List<SpawnPoint> playerSpawnPoints = GetComponent<PlayerSpawner>().playerSpawnPoints;
+        GameObject startMenuCamera = GetComponent<GameObject>();
         // List<SpawnPoint> enemySpawnPoints = ...
         PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints);
         string data = JsonUtility.ToJson(playerJSON);
         socket.Emit("play", new JSONObject(data));
         canvas.gameObject.SetActive(false);
+        startMenuCamera.gameObject.SetActive(false);
      }
 
     #endregion
