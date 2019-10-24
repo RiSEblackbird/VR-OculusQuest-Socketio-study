@@ -56,7 +56,7 @@ io.on('connection', function(socket){
 
         console.log(currentPlayer.name + ' emit: enemies: ' + JSON.stringify(enemiesResponse));
         socket.emit('enemies', enemiesResponse);
-        var randamSpawnPoint = playerSpawnPoints[Math, floor(Math.ramdom() * playerSpawnPoints.length)];
+        var randamSpawnPoint = playerSpawnPoints[Math.floor(Math.random() * playerSpawnPoints.length)];
         currentPlayer = {
             name: data.name,
             position: randamSpawnPoint.position,
