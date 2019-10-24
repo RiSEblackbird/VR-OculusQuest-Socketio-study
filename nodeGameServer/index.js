@@ -5,7 +5,7 @@ var io = require('socket.io')(server);
 server.listen(3000);
 
 var enemies = [];
-var playerSpawnerPoints = [];
+var playerSpawnPoints = [];
 var clients = [];
 
 app.get('/', function(req, res) {
@@ -40,13 +40,13 @@ io.on('connection', function(socket){
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
-            playerSpawnerPoints = [];
-            data.playerSpawnerPoints.forEach(function(_playerSpawnPoint) {
-                var playerSpawnerPoint = {
+            playerSpawnPoints = [];
+            data.playerSpawnPoints.forEach(function(_playerSpawnPoint) {
+                var playerSpawnPoint = {
                     position: _playerSpawnPoint.position,
                     rotation: _playerSpawnPoint.rotation
                 };
-                playerSpawnerPoints.push(playerSpawnerPoint);
+                playerSpawnPoints.push(playerSpawnPoint);
             });
         }
 
@@ -56,7 +56,7 @@ io.on('connection', function(socket){
 
         console.log(currentPlayer.name + ' emit: enemies: ' + JSON.stringify(enemiesResponse));
         socket.emit('enemies', enemiesResponse);
-        var randamSpawnPoint = playerSpawnerPoints[Math, floor(Math.ramdom() * playerSpawnerPoints.length)];
+        var randamSpawnPoint = playerSpawnPoints[Math, floor(Math.ramdom() * playerSpawnPoints.length)];
         currentPlayer = {
             name: data.name,
             position: randamSpawnPoint.position,

@@ -131,16 +131,16 @@ public class NetworkManager : MonoBehaviour
     public class PlayerJSON
     {
         public string name;
-        public List<PointJSON> playersSpawnPoints;
+        public List<PointJSON> playerSpawnPoints;
         
         public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints)
         {
-            playersSpawnPoints = new List<PointJSON>();
+            playerSpawnPoints = new List<PointJSON>();
             name = _name;
             foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(playerSpawnPoint);
-                playersSpawnPoints.Add(pointJSON);
+                playerSpawnPoints.Add(pointJSON);
             }
         }
     }
