@@ -66,7 +66,6 @@ io.on('connection', function(socket){
         clients.push(currentPlayer);
         // 現在入っているプレイヤーを出力
         console.log(currentPlayer.name + ' emit: play: ' + JSON.stringify(currentPlayer));
-        socket.emit('play', currentPlayer);
         // 既にいるプレイヤー達に自分が入ったことを伝える
         socket.broadcast.emit('other player connected', currentPlayer);
     });

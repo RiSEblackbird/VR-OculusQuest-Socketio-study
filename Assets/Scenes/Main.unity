@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -54847,24 +54847,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
-      propertyPath: url
-      value: ws://127.0.0.1:3000/socket.io/?EIO=4&transport=websocket
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
---- !u!114 &1363427360 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 11400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1363427359}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1367300527
 GameObject:
   m_ObjectHideFlags: 0
@@ -83147,24 +83131,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e6ba09738d89a94982ecc3ad78dc4f6, type: 3}
---- !u!223 &2245763728718715145 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 2245763727767855075, guid: 8e6ba09738d89a94982ecc3ad78dc4f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 2245763728718715144}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2245763728718715146 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2245763728335631699, guid: 8e6ba09738d89a94982ecc3ad78dc4f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 2245763728718715144}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2843430890329736157
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83326,26 +83292,6 @@ PrefabInstance:
       propertyPath: spawnPoints.Array.data[0]
       value: 
       objectReference: {fileID: 1401889295810134259}
-    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
-        type: 3}
-      propertyPath: socket
-      value: 
-      objectReference: {fileID: 1363427360}
-    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
-        type: 3}
-      propertyPath: canvas
-      value: 
-      objectReference: {fileID: 2245763728718715145}
-    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
-        type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 672748872}
-    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
-        type: 3}
-      propertyPath: playerNameInput
-      value: 
-      objectReference: {fileID: 2245763728718715146}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe, type: 3}
 --- !u!1001 &3296216599248613335
