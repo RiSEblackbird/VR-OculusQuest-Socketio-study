@@ -66,13 +66,25 @@ public class NetworkManager : MonoBehaviour
     public void CommandMove(Vector3 vec3)
     {
         string data = JsonUtility.ToJson(new PositionJSON(vec3));
-        socket.Emit("Player move", new JSONObject(data));
+        socket.Emit("player move", new JSONObject(data));
     }
 
-    public void CommandRotate(Quaternion quat)
+    public void CommandTurn(Quaternion quat)
     {
         string data = JsonUtility.ToJson(new RotationJSON(quat));
-        socket.Emit("Player turn", new JSONObject(data));
+        socket.Emit("player turn", new JSONObject(data));
+    }
+
+    public void HeadMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new PositionJSON(vec3));
+        socket.Emit("head move", new JSONObject(data));
+    }
+
+    public void HeadTurn(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new RotationJSON(quat));
+        socket.Emit("head turn", new JSONObject(data));
     }
 
     #endregion
@@ -116,7 +128,7 @@ public class NetworkManager : MonoBehaviour
         Transform t1 = p.transform.Find("Player Name"); 
         Text playerName = t1.GetComponent<Text>();
         playerName.text = currentUserJSON.name;
-        pc.isLocalPlayer = false;
+        pc.isLocalPlayer = true;
         p.name = currentUserJSON.name;
     }
 
