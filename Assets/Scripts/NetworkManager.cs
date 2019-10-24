@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SocketIO;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager instance;
     public Canvas canvas;
-    // public SocketIOComponent socket;
+    public SocketIOComponent socket;
     public InputField playerNameInput;
     public GameObject player;
 
