@@ -25,12 +25,13 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene(sceneIndex);
         }
 
+        /*
         if (count == 0) {
             // オブジェクトをアクティブにする
             winnerLabelObject.SetActive(true);
             Reticle.SetActive(false);
         }
-        
+        */
     }
 
     public void OnRetry ()
