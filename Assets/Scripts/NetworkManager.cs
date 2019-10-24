@@ -63,6 +63,18 @@ public class NetworkManager : MonoBehaviour
         startMenuCamera.gameObject.SetActive(false);
      }
 
+    public void CommandMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new PositionJSON(vec3));
+        socket.Emit("Player move", new JSONObject(data));
+    }
+
+    public void CommandRotate(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new RotationJSON(quat));
+        socket.Emit("Player turn", new JSONObject(data));
+    }
+
     #endregion
 
     #region Listening
@@ -110,16 +122,42 @@ public class NetworkManager : MonoBehaviour
 
     void OnPlayerMove(SocketIOEvent socketIOEvent)
     {
-
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Vector3 position = new Vector3(userJSON.position[0], userJSON.position[1], userJSON.position[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.position = position;
+        }
+            
     }
 
     void OnPlayerTurn(SocketIOEvent socketIOEvent)
     {
-
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Quaternion rotation = Quaternion.Euler(userJSON.rotation[0], userJSON.rotation[1], userJSON.rotation[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.rotation = rotation;
+        }
     }
     void OnOtherPlayerDisconnected(SocketIOEvent socketIOEvent)
     {
-
+        print("user disconnected");
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Destroy(GameObject.Find(userJSON.name));
     }
     
 
