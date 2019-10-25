@@ -34,16 +34,12 @@ public class MultiPlayerController : MonoBehaviour
     void Update()
     {
         // キャラクターが自分であること
-
-        isLocalPlayer = false;
-
-        if (isLocalPlayer == false)
+        
+        if (!isLocalPlayer)
         {
             return;
         }
-
-        Debug.Log("ローカルプレイヤー判別後の実際の値は⇒　" + isLocalPlayer);
-
+       
         currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
         currentPosition = transform.position;
         currentRotaion = transform.rotation;
@@ -74,7 +70,6 @@ public class MultiPlayerController : MonoBehaviour
             var forward = oldHead.forward;
             forward.y = 0;
             transform.position += forward.normalized * Time.deltaTime;
-            Debug.Log("前進！！！！！！！　ローカルプレイヤー判別後の実際の値は⇒　" + isLocalPlayer);
         }
         
         // Back move
