@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 2245763727032666070}
   - component: {fileID: 2245763727032666069}
   m_Layer: 5
-  m_Name: MenuPanel
+  m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ RectTransform:
   m_GameObject: {fileID: 2245763727032666067}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children:
   - {fileID: 2245763728042412750}
   - {fileID: 2245763728101921024}
@@ -320,12 +320,12 @@ GameObject:
   - component: {fileID: 2245763727767855074}
   - component: {fileID: 2245763727767855073}
   m_Layer: 5
-  m_Name: StartingFormPanel
+  m_Name: Join Game Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2245763727767855076
 RectTransform:
   m_ObjectHideFlags: 0
@@ -523,7 +523,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2245763727770721690}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+          type: 3}
+        m_MethodName: JoinGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2245763728042412749
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +548,7 @@ GameObject:
   - component: {fileID: 2245763728042412736}
   - component: {fileID: 2245763728042412751}
   m_Layer: 5
-  m_Name: title
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
