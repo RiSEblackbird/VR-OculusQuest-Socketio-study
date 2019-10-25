@@ -20,23 +20,24 @@ io.on('connection', function(socket){
 
     // ①プレイヤーの接続
     socket.on('player connect', function(){
-        console.log(currentPlayer.name + ' recv: player connect');
+        console.log(currentPlayer.name+' recv: player connect');
         // すべてのクライアントについて名前と位置と回転を定義
-        for(var i; i<clients.length; i++) {
+        for(var i=0; i<clients.length; i++) {
             var playerConnected = {
                 name:clients[i].name,
                 position:clients[i].position,
-                rotation:clients[i].rotation
+                rotation:clients[i].rotation,
+                health:clients[i].health
             };
             socket.emit('other player connected', playerConnected);
             // 接続された」プレイヤーの情報を表示
-            console.log(currentPlayer.name + ' emit: other player connected: ' + JSON.stringify(playerConnected));
+            console.log(currentPlayer.name+' emit: other player connected: '+JSON.stringify(playerConnected));
         }
     });
 
     // ②ゲームプレイ中の通信
     socket.on('play', function(data){
-        console.log(currentPlayer.name + 'recv: play: ' + JSON.stringify(data));
+        console.log(currentPlayer.name+' recv: play: '+JSON.stringify(data));
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
@@ -54,7 +55,7 @@ io.on('connection', function(socket){
             enemies: enemies
         };
 
-        console.log(currentPlayer.name + ' emit: enemies: ' + JSON.stringify(enemiesResponse));
+        console.log(currentPlayer.name+' emit: enemies: '+JSON.stringify(enemiesResponse));
         socket.emit('enemies', enemiesResponse);
         var randamSpawnPoint = playerSpawnPoints[Math.floor(Math.random() * playerSpawnPoints.length)];
         currentPlayer = {
@@ -62,10 +63,11 @@ io.on('connection', function(socket){
             position: randamSpawnPoint.position,
             rotation: randamSpawnPoint.rotation
         };
+
         // クライアントの列に現在接続したプレイヤーを加える
         clients.push(currentPlayer);
         // 現在入っているプレイヤーを出力
-        console.log(currentPlayer.name + ' emit: play: ' + JSON.stringify(currentPlayer));
+        console.log(currentPlayer.name + ' emit: play: '+JSON.stringify(currentPlayer));
         socket.emit('play', currentPlayer);
         // 既にいるプレイヤー達に自分が入ったことを伝える
         socket.broadcast.emit('other player connected', currentPlayer);
@@ -73,24 +75,23 @@ io.on('connection', function(socket){
 
     // ③プレイヤーの移動
     socket.on('player move', function(data) {
-        console.log('recv: move: '+JSON.stringify(data));
+        console.log(currentPlayer.name+' recv: move: '+JSON.stringify(data));
         currentPlayer.position = data.position;
         socket.broadcast.emit('player move', currentPlayer);
     });
 
     // ④プレイヤーの回転
     socket.on('player turn', function(data) {
-        console.log('recv: turn: '+JSON.stringify(data));
+        console.log(currentPlayer.name+' recv: turn: '+JSON.stringify(data));
         currentPlayer.rotation = data.rotation;
         socket.broadcast.emit('player turn', currentPlayer);
     });
 
     // ⑤プレイヤーの接続解除
-    socket.on('disconnect', function()
-    {
-        console.log(currentPlayer.name+' recv: disconnect ' +currentPlayer.name);
+    socket.on('disconnect', function() {
+        console.log(currentPlayer.name+' recv: disconnect '+currentPlayer.name);
         socket.broadcast.emit('other player disconnected', currentPlayer);
-        console.log(currentPlayer.name+' bcst: other player disconnected ' +JSON.stringify(currentPlayer));
+        console.log(currentPlayer.name+' bcst: other player disconnected '+JSON.stringify(currentPlayer));
         // クライアント一覧から、離脱者のみを消去する
         for(var i=0; i<clients.length; i++) {
             if(clients[i].name === currentPlayer.name) {
@@ -98,9 +99,43 @@ io.on('connection', function(socket){
             }
         }
     });
+
+    // ⑥キャラクターの体力
+    socket.on('health', function(data) {
+        console.log(currentPlayer.name+' bcst: health: '+JSON.stringify(data));
+        if(data.from === currentPlayer.name) {
+            var indexDamaged = 0;
+            if(!data.isEnemy) {
+                clients = clients.map(function(client, index) {
+                    if(client.name === data.name) {
+                        indexDamaged = index;
+                        client.health -= data.healthChange;
+                    }
+                    return client;
+                });
+            } else {
+                enemies = enemies.map(function(enemy, index) {
+                    if(enemy.name === data.name) {
+                        indexDamaged = index;
+                        enemy.health -= data.healthChange;
+                    }
+                    return enemy;
+                });
+            }
+
+            var responce = {
+                name: (!data.isEnemy) ? clients[indexDamaged].name : enemies[indexDamaged].name,
+                health: (!data.isEnemy) ? clients[indexDamaged].health : enemies[indexDamaged].health
+            };
+            console.log(currentPlayer.name+' bcst: health: '+JSON.stringify(responce));
+            socket.emit('health', response);
+            socket.broadcast.emit('health', response);
+        }
+
+    });
 });
 
-console.log('server is running...' + guid());
+console.log('server is running...'+guid());
 
 function guid() {
     function s4() {
