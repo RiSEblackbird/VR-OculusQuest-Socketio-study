@@ -38,7 +38,9 @@ public class MultiPlayerController : MonoBehaviour
         {
             return;
         }
-        
+
+        Debug.Log("ローカルプレイヤー判別後の実際の値は⇒　" + isLocalPlayer);
+
         currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
         currentPosition = transform.position;
         currentRotaion = transform.rotation;
