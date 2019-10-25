@@ -61,7 +61,6 @@ public class NetworkManager : MonoBehaviour
         string data = JsonUtility.ToJson(playerJSON);
         socket.Emit("play", new JSONObject(data));
         canvas.gameObject.SetActive(false);
-        startMenuCamera.gameObject.SetActive(false);
      }
 
     public void CommandMove(Vector3 vec3)
@@ -122,6 +121,7 @@ public class NetworkManager : MonoBehaviour
     void OnPlay(SocketIOEvent socketIOEvent)
     {
         print("you joined");
+        startMenuCamera.gameObject.SetActive(false);
         string data = socketIOEvent.data.ToString();
         UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
         Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
@@ -134,6 +134,8 @@ public class NetworkManager : MonoBehaviour
         playerName.text = currentUserJSON.name;
         pc.isLocalPlayer = true;
         p.name = currentUserJSON.name;
+        GameObject MainCamera = p.transform.Find("OVRCameraRig").gameObject;
+        MainCamera.gameObject.SetActive(true);
     }
 
     void OnPlayerMove(SocketIOEvent socketIOEvent)

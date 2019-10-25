@@ -34,7 +34,10 @@ public class MultiPlayerController : MonoBehaviour
     void Update()
     {
         // キャラクターが自分であること
-        if (!isLocalPlayer)
+
+        isLocalPlayer = false;
+
+        if (isLocalPlayer == false)
         {
             return;
         }
@@ -71,6 +74,7 @@ public class MultiPlayerController : MonoBehaviour
             var forward = oldHead.forward;
             forward.y = 0;
             transform.position += forward.normalized * Time.deltaTime;
+            Debug.Log("前進！！！！！！！　ローカルプレイヤー判別後の実際の値は⇒　" + isLocalPlayer);
         }
         
         // Back move

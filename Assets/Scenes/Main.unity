@@ -83801,6 +83801,11 @@ PrefabInstance:
       propertyPath: startMenuCamera
       value: 
       objectReference: {fileID: 89114086}
+    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: MyMainCamera
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe, type: 3}
 --- !u!114 &2934967753122204867 stripped
