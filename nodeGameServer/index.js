@@ -73,6 +73,21 @@ io.on('connection', function(socket){
         socket.broadcast.emit('other player connected', currentPlayer);
     });
 
+    // ③ヘッドの移動
+    socket.on('head move', function(data) {
+        console.log(currentPlayer.name+' recv: head move: '+JSON.stringify(data));
+        currentPlayer.headPosition = data.headPosition;
+        socket.broadcast.emit('head move', currentPlayer);
+    });
+
+    // ④ヘッドの回転
+    socket.on('head turn', function(data) {
+        console.log(currentPlayer.name+' recv: head turn: '+JSON.stringify(data));
+        currentPlayer.headRotation = data.headRotation;
+        socket.broadcast.emit('heade turn', currentPlayer);
+    });
+
+
     // ③プレイヤーの移動
     socket.on('player move', function(data) {
         console.log(currentPlayer.name+' recv: move: '+JSON.stringify(data));

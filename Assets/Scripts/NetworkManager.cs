@@ -31,6 +31,8 @@ public class NetworkManager : MonoBehaviour
         // socket.On("enemies", OnEnemies);
         socket.On("other player connected", OnOtherPlayerConnected);
         socket.On("play", OnPlay);
+        socket.On("head move", OnHeadMove);
+        socket.On("head turn", OnHeadTurn);
         socket.On("player move", OnPlayerMove);
         socket.On("player turn", OnPlayerTurn);
         socket.On("health", OnHealth);
@@ -75,15 +77,15 @@ public class NetworkManager : MonoBehaviour
         socket.Emit("player turn", new JSONObject(data));
     }
 
-    public void HeadMove(Vector3 vec3)
+    public void CommandHeadMove(Vector3 vec3)
     {
-        string data = JsonUtility.ToJson(new PositionJSON(vec3));
+        string data = JsonUtility.ToJson(new HeadPositionJSON(vec3));
         socket.Emit("head move", new JSONObject(data));
     }
 
-    public void HeadTurn(Quaternion quat)
+    public void CommandHeadTurn(Quaternion quat)
     {
-        string data = JsonUtility.ToJson(new RotationJSON(quat));
+        string data = JsonUtility.ToJson(new HeadRotationJSON(quat));
         socket.Emit("head turn", new JSONObject(data));
     }
 
@@ -136,6 +138,39 @@ public class NetworkManager : MonoBehaviour
         p.name = currentUserJSON.name;
         GameObject MainCamera = p.transform.Find("OVRCameraRig").gameObject;
         MainCamera.gameObject.SetActive(true);
+    }
+
+    void OnHeadMove(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Vector3 headPosition = new Vector3(userJSON.headPosition[0], userJSON.headPosition[1], userJSON.headPosition[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.position = headPosition;
+        }
+
+    }
+
+    void OnHeadTurn(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Quaternion headRotation = Quaternion.Euler(userJSON.headRotation[0], userJSON.headRotation[1], userJSON.headRotation[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.rotation = headRotation;
+        }
     }
 
     void OnPlayerMove(SocketIOEvent socketIOEvent)
@@ -237,6 +272,28 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
+    public class HeadPositionJSON
+    {
+        public float[] headPosition;
+
+        public HeadPositionJSON(Vector3 _headPosition)
+        {
+            headPosition = new float[] { _headPosition.x, _headPosition.y, _headPosition.z };
+        }
+    }
+
+    [Serializable]
+    public class HeadRotationJSON
+    {
+        public float[] headRotation;
+
+        public HeadRotationJSON(Quaternion _headRotation)
+        {
+            headRotation = new float[] { _headRotation.eulerAngles.x, _headRotation.eulerAngles.y, _headRotation.eulerAngles.z };
+        }
+    }
+
+    [Serializable]
     public class PositionJSON
     {
         public float[] position;
@@ -262,6 +319,8 @@ public class NetworkManager : MonoBehaviour
     public class UserJSON
     {
         public string name;
+        public float[] headPosition;
+        public float[] headRotation;
         public float[] position;
         public float[] rotation;
         public int health;
