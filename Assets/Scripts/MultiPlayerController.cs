@@ -12,37 +12,59 @@ public class MultiPlayerController : MonoBehaviour
     // リアルタイム通信向けのパラメーター
     Transform oldHead = null;
     Transform currentHead = null;
+    Vector3 oldHeadPosition;
+    Vector3 currentHeadPosition;
     Vector3 oldPosition;
     Vector3 currentPosition;
+    Quaternion oldHeadRotation;
+    Quaternion currentHeadRotation;
     Quaternion oldRotation;
-    Quaternion currentRotaion;
+    Quaternion currentRotation;
 
+    
     void Reset()
     {
         oldHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
+        oldHeadPosition = oldHead.position;
+        oldHeadRotation = transform.rotation;
         oldPosition = transform.position;
         oldRotation = transform.rotation;
     }
-
+    /*
     void Start()
     {
         currentHead = oldHead;
+        currentHeadPosition = oldHeadPosition;
+        currentHeadRotation = oldHeadRotation;
         currentPosition = oldPosition;
-        currentRotaion = oldRotation;
+        currentRotation = oldRotation;
     }
-    
+    */
     void Update()
     {
         // キャラクターが自分であること
-        
         if (!isLocalPlayer)
         {
             return;
         }
        
         currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
+        currentHeadPosition = oldHeadPosition;
+        currentHeadRotation = oldHeadRotation;
         currentPosition = transform.position;
-        currentRotaion = transform.rotation;
+        currentRotation = transform.rotation;
+
+        if (currentHeadPosition != oldHeadPosition)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadMove(oldHead.position);
+            oldHeadPosition = currentHeadPosition;
+        }
+
+        if (currentRotation != oldRotation)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadTurn(transform.rotation);
+            oldHeadRotation = currentHeadRotation;
+        }
 
         if (currentPosition != oldPosition)
         {
@@ -50,24 +72,16 @@ public class MultiPlayerController : MonoBehaviour
             oldPosition = currentPosition;
         }
 
-        if (currentRotaion != oldRotation)
+        if (currentRotation != oldRotation)
         {
             NetworkManager.instance.GetComponent<NetworkManager>().CommandTurn(transform.rotation);
-            oldRotation = currentRotaion;
+            oldRotation = currentRotation;
         }
-        
-        /*
-        if (currentHead != oldHead)
-        {
-            NetworkManager.instance.GetComponent<NetworkManager>().
-            oldHead = currentHead;
-        }
-        */
 
         // Forward move
         if (Input.GetKey(KeyCode.W) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
         {
-            var forward = oldHead.forward;
+            var forward = currentHead.forward;
             forward.y = 0;
             transform.position += forward.normalized * Time.deltaTime;
         }
@@ -75,7 +89,7 @@ public class MultiPlayerController : MonoBehaviour
         // Back move
         if (Input.GetKey(KeyCode.S) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickDown))
         {
-            var forward = oldHead.forward;
+            var forward = currentHead.forward;
             forward.y = 0;
             transform.position -= forward.normalized * Time.deltaTime;
         }
@@ -83,14 +97,14 @@ public class MultiPlayerController : MonoBehaviour
         // 追記：Left move
         if (Input.GetKey(KeyCode.A) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickLeft))
         {
-            var right = oldHead.right;
+            var right = currentHead.right;
             right.y = 0;
             transform.position -= right.normalized * Time.deltaTime;
         }
         // 追記：Right move
         if (Input.GetKey(KeyCode.D) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickRight))
         {
-            var right = oldHead.right;
+            var right = currentHead.right;
             right.y = 0;
             transform.position += right.normalized * Time.deltaTime;
         }
