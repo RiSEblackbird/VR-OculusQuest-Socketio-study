@@ -34,11 +34,12 @@ public class MultiPlayerController : MonoBehaviour
     void Update()
     {
         // キャラクターが自分であること
+        
         if (!isLocalPlayer)
         {
             return;
         }
-        
+       
         currentHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
         currentPosition = transform.position;
         currentRotaion = transform.rotation;

@@ -44,6 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68dd62e520bd96d4ab897bfef3fd28fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  socket: {fileID: 0}
+  playerNameInput: {fileID: 0}
+  player: {fileID: 939603406337776409, guid: 36912e6d45a4e86419e65e8b8979c304, type: 3}
+  startMenuCamera: {fileID: 0}
+  MyMainCamera: {fileID: 0}
 --- !u!114 &2934967753152730807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56,3 +62,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d65865767d0144bb199f4eee4e2440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpawnPoints: []

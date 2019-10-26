@@ -33,6 +33,7 @@ public class NetworkManager : MonoBehaviour
         socket.On("play", OnPlay);
         socket.On("player move", OnPlayerMove);
         socket.On("player turn", OnPlayerTurn);
+        socket.On("health", OnHealth);
         socket.On("other player disconnected", OnOtherPlayerDisconnected);
     }
 
@@ -48,7 +49,7 @@ public class NetworkManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        socket.Emit("Player connect");
+        socket.Emit("player connect");
 
         yield return new WaitForSeconds(1f);
 
@@ -60,7 +61,6 @@ public class NetworkManager : MonoBehaviour
         string data = JsonUtility.ToJson(playerJSON);
         socket.Emit("play", new JSONObject(data));
         canvas.gameObject.SetActive(false);
-        startMenuCamera.gameObject.SetActive(false);
      }
 
     public void CommandMove(Vector3 vec3)
@@ -105,31 +105,37 @@ public class NetworkManager : MonoBehaviour
         }
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
-        // Transform t = p.transform.Find("Healthbar Canvas");
-        Transform t1 = p.transform.Find("Player Name"); // 動画ではt.transform~~だがヘルスバー未実装なため"p"からタグを探させる。
+        Transform t = p.transform.Find("Healthbar Canvas");
+        Transform t1 = t.transform.Find("Player Name"); 
         Text playerName = t1.GetComponent<Text>();
         playerName.text = userJSON.name;
+        Debug.Log(p.name + " Joined!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! isLocalPlayer is " + pc.isLocalPlayer);
         pc.isLocalPlayer = false;
         p.name = userJSON.name;
-        // Health h = p.GetComponent<Health>;
-        // h.currentHealth = userJSON.health;
-        // h.OnChangeHealth();
+        Health h = p.GetComponent<Health>();
+        h.currentHealth = userJSON.health;
+        h.OnChangeHealth();
+        Debug.Log(p.name + " Joined!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! isLocalPlayer is " + pc.isLocalPlayer);
     }
 
     void OnPlay(SocketIOEvent socketIOEvent)
     {
         print("you joined");
+        startMenuCamera.gameObject.SetActive(false);
         string data = socketIOEvent.data.ToString();
         UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
         Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
         Quaternion rotation = Quaternion.Euler(currentUserJSON.rotation[0], currentUserJSON.rotation[1], currentUserJSON.rotation[2]);
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
-        Transform t1 = p.transform.Find("Player Name"); 
+        Transform t = p.transform.Find("Healthbar Canvas");
+        Transform t1 = t.transform.Find("Player Name"); 
         Text playerName = t1.GetComponent<Text>();
         playerName.text = currentUserJSON.name;
         pc.isLocalPlayer = true;
         p.name = currentUserJSON.name;
+        GameObject MainCamera = p.transform.Find("OVRCameraRig").gameObject;
+        MainCamera.gameObject.SetActive(true);
     }
 
     void OnPlayerMove(SocketIOEvent socketIOEvent)
@@ -164,6 +170,18 @@ public class NetworkManager : MonoBehaviour
             p.transform.rotation = rotation;
         }
     }
+
+    void OnHealth(SocketIOEvent socketIOEvent)
+    {
+        print("changing the health");
+        string data = socketIOEvent.data.ToString();
+        UserHealthJSON userHealthJSON = UserHealthJSON.CreateFromJSON(data);
+        GameObject p = GameObject.Find(userHealthJSON.name);
+        Health h = p.GetComponent<Health>();
+        h.currentHealth = userHealthJSON.health;
+        h.OnChangeHealth();
+    }
+
     void OnOtherPlayerDisconnected(SocketIOEvent socketIOEvent)
     {
         print("user disconnected");
@@ -246,7 +264,7 @@ public class NetworkManager : MonoBehaviour
         public string name;
         public float[] position;
         public float[] rotation;
-        // public int health; 体力など定義あれば。
+        public int health;
 
         public static UserJSON CreateFromJSON(string data)
         {
@@ -254,6 +272,19 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class UserHealthJSON
+    {
+        public string name;
+        public int health;
+
+        public static UserHealthJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UserHealthJSON>(data);
+        }
+    }
+
+    /*
     [Serializable]
     public class EnemiesJSON
     {
@@ -264,6 +295,7 @@ public class NetworkManager : MonoBehaviour
             return JsonUtility.FromJson<EnemiesJSON>(data);
         }
     }
+    */
 
     #endregion
 }
