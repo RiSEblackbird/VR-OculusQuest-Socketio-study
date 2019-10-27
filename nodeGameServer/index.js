@@ -25,13 +25,40 @@ io.on('connection', function(socket){
         for(var i=0; i<clients.length; i++) {
             var playerConnected = {
                 name:clients[i].name,
+                
                 position:clients[i].position,
                 rotation:clients[i].rotation,
+
                 health:clients[i].health
             };
+
+            var connectedHead = {
+                name:clients[i].name,
+                headPosition:clients[i].headPosition,
+                headRotation:clients[i].headRotation
+            };
+
+            var connectedRightHand = {
+                name:clients[i].name,
+                rightHandPosition:clients[i].rightHandPosition,
+                rightHandRotation:clients[i].rightHandRotation
+            };
+
+            var connectedLeftHand = {
+                name:clients[i].name,
+                leftHandPosition:clients[i].leftHandPosition,
+                leftHandRotation:clients[i].leftHandRotation
+            };
+
             socket.emit('other player connected', playerConnected);
+            socket.emit('other player head', connectedHead);
+            socket.emit('other player right hand', connectedRightHand);
+            socket.emit('other player left hand', connectedLeftHand);
             // 接続された」プレイヤーの情報を表示
             console.log(currentPlayer.name+' emit: other player connected: '+JSON.stringify(playerConnected));
+            console.log(currentPlayer.name+' emit: other player head: '+JSON.stringify(connectedHead));
+            console.log(currentPlayer.name+' emit: other player right hand: '+JSON.stringify(connectedRightHand));
+            console.log(currentPlayer.name+' emit: other player leftt hand: '+JSON.stringify(connectedLeftHand));
         }
     });
 
