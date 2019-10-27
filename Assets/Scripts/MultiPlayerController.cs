@@ -11,17 +11,28 @@ public class MultiPlayerController : MonoBehaviour
     
     // リアルタイム通信向けのパラメーター
     Transform oldHead = null;
+    Transform oldRightHand = null;
+    Transform oldLeftHand = null;
     Transform currentHead = null;
+    Transform currentRightHand = null;
+    Transform currentLeftHand = null;
     Vector3 oldHeadPosition;
-    Vector3 currentHeadPosition;
     Vector3 oldPosition;
+    Vector3 oldRightHandPosition;
+    Vector3 oldLeftHandPosition;
+    Vector3 currentHeadPosition;
     Vector3 currentPosition;
+    Vector3 currentRightHandPosition;
+    Vector3 currentLeftHandPosition;
     Quaternion oldHeadRotation;
-    Quaternion currentHeadRotation;
     Quaternion oldRotation;
+    Quaternion oldRightHandRotation;
+    Quaternion oldLeftHandRotation;
+    Quaternion currentHeadRotation;
     Quaternion currentRotation;
+    Quaternion currentRightHandRotation;
+    Quaternion currentLeftHandRotation;
 
-    
     void Reset()
     {
         oldHead = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/CenterEyeAnchor");
@@ -29,17 +40,15 @@ public class MultiPlayerController : MonoBehaviour
         oldHeadRotation = transform.rotation;
         oldPosition = transform.position;
         oldRotation = transform.rotation;
+        oldRightHand = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/DistanceGrabHandRight");
+        oldRightHandPosition = oldRightHand.position;
+        oldRightHandRotation = oldRightHand.rotation;
+        oldLeftHand = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/DistanceGrabHandLeft");
+        oldLeftHandPosition = oldLeftHand.position;
+        oldLeftHandRotation = oldLeftHand.rotation;
+
     }
-    /*
-    void Start()
-    {
-        currentHead = oldHead;
-        currentHeadPosition = oldHeadPosition;
-        currentHeadRotation = oldHeadRotation;
-        currentPosition = oldPosition;
-        currentRotation = oldRotation;
-    }
-    */
+
     void Update()
     {
         // キャラクターが自分であること
@@ -53,14 +62,20 @@ public class MultiPlayerController : MonoBehaviour
         currentHeadRotation = oldHeadRotation;
         currentPosition = transform.position;
         currentRotation = transform.rotation;
+        currentRightHand = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/DistanceGrabHandRight");
+        currentRightHandPosition = oldRightHandPosition;
+        currentRightHandRotation = oldRightHandRotation;
+        currentLeftHand = GetComponentInChildren<OVRCameraRig>().transform.Find("TrackingSpace/DistanceGrabHandLeft");
+        currentLeftHandPosition = oldLeftHandPosition;
+        currentLeftHandRotation = oldLeftHandRotation;
 
         if (currentHeadPosition != oldHeadPosition)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadMove(oldHead.position);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadMove(transform.position);
             oldHeadPosition = currentHeadPosition;
         }
 
-        if (currentRotation != oldRotation)
+        if (currentHeadRotation != oldHeadRotation)
         {
             NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadTurn(transform.rotation);
             oldHeadRotation = currentHeadRotation;
@@ -76,6 +91,30 @@ public class MultiPlayerController : MonoBehaviour
         {
             NetworkManager.instance.GetComponent<NetworkManager>().CommandTurn(transform.rotation);
             oldRotation = currentRotation;
+        }
+        
+        if (currentRightHandPosition != oldRightHandPosition)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandMove(transform.position);
+            oldRightHandPosition = currentRightHandPosition;
+        }
+
+        if (currentRightHandRotation != oldRightHandRotation)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandTurn(transform.rotation);
+            oldRightHandRotation = currentRightHandRotation;
+        }
+        
+        if (currentLeftHandPosition != oldLeftHandPosition)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandMove(transform.position);
+            oldLeftHandPosition = currentLeftHandPosition;
+        }
+
+        if (currentLeftHandRotation != oldLeftHandRotation)
+        {
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandTurn(transform.rotation);
+            oldLeftHandRotation = currentLeftHandRotation;
         }
 
         // Forward move

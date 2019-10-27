@@ -35,6 +35,10 @@ public class NetworkManager : MonoBehaviour
         socket.On("head turn", OnHeadTurn);
         socket.On("player move", OnPlayerMove);
         socket.On("player turn", OnPlayerTurn);
+        socket.On("right hand move", OnRightHandMove);
+        socket.On("right hand turn", OnRightHandTurn);
+        socket.On("left hand move", OnLeftHandMove);
+        socket.On("left hand turn", OnLeftHandTurn);
         socket.On("health", OnHealth);
         socket.On("other player disconnected", OnOtherPlayerDisconnected);
     }
@@ -87,6 +91,30 @@ public class NetworkManager : MonoBehaviour
     {
         string data = JsonUtility.ToJson(new HeadRotationJSON(quat));
         socket.Emit("head turn", new JSONObject(data));
+    }
+
+    public void CommandRightHandMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new RightHandPositionJSON(vec3));
+        socket.Emit("right hand move", new JSONObject(data));
+    }
+
+    public void CommandRightHandTurn(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new RightHandRotationJSON(quat));
+        socket.Emit("right hand turn", new JSONObject(data));
+    }
+
+    public void CommandLeftHandMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new LeftHandPositionJSON(vec3));
+        socket.Emit("left hand move", new JSONObject(data));
+    }
+
+    public void CommandLeftHandTurn(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new LeftHandRotationJSON(quat));
+        socket.Emit("left hand turn", new JSONObject(data));
     }
 
     #endregion
@@ -206,6 +234,72 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    void OnRightHandMove(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Vector3 rightHandPosition = new Vector3(userJSON.rightHandPosition[0], userJSON.rightHandPosition[1], userJSON.rightHandPosition[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.position = rightHandPosition;
+        }
+
+    }
+
+    void OnRightHandTurn(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Quaternion rightHandRotation = Quaternion.Euler(userJSON.rightHandRotation[0], userJSON.rightHandRotation[1], userJSON.rightHandRotation[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.rotation = rightHandRotation;
+        }
+    }
+
+    void OnLeftHandMove(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Vector3 leftHandPosition = new Vector3(userJSON.leftHandPosition[0], userJSON.leftHandPosition[1], userJSON.leftHandPosition[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.position = leftHandPosition;
+        }
+
+    }
+
+    void OnLeftHandTurn(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        UserJSON userJSON = UserJSON.CreateFromJSON(data);
+        Quaternion leftHandRotation = Quaternion.Euler(userJSON.leftHandRotation[0], userJSON.leftHandRotation[1], userJSON.rightHandRotation[2]);
+        if (userJSON.name == playerNameInput.text)
+        {
+            return;
+        }
+        GameObject p = GameObject.Find(userJSON.name) as GameObject;
+        if (p != null)
+        {
+            p.transform.rotation = leftHandRotation;
+        }
+    }
+
     void OnHealth(SocketIOEvent socketIOEvent)
     {
         print("changing the health");
@@ -316,6 +410,50 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
+    public class RightHandPositionJSON
+    {
+        public float[] rightHandPosition;
+
+        public RightHandPositionJSON(Vector3 _rightHandPosition)
+        {
+            rightHandPosition = new float[] { _rightHandPosition.x, _rightHandPosition.y, _rightHandPosition.z };
+        }
+    }
+
+    [Serializable]
+    public class RightHandRotationJSON
+    {
+        public float[] rightHandRotation;
+
+        public RightHandRotationJSON(Quaternion _rightHandRotation)
+        {
+            rightHandRotation = new float[] { _rightHandRotation.eulerAngles.x, _rightHandRotation.eulerAngles.y, _rightHandRotation.eulerAngles.z };
+        }
+    }
+
+    [Serializable]
+    public class LeftHandPositionJSON
+    {
+        public float[] leftHandPosition;
+
+        public LeftHandPositionJSON(Vector3 _leftHandPosition)
+        {
+            leftHandPosition = new float[] { _leftHandPosition.x, _leftHandPosition.y, _leftHandPosition.z };
+        }
+    }
+
+    [Serializable]
+    public class LeftHandRotationJSON
+    {
+        public float[] leftHandRotation;
+
+        public LeftHandRotationJSON(Quaternion _leftHandRotation)
+        {
+            leftHandRotation = new float[] { _leftHandRotation.eulerAngles.x, _leftHandRotation.eulerAngles.y, _leftHandRotation.eulerAngles.z };
+        }
+    }
+
+    [Serializable]
     public class UserJSON
     {
         public string name;
@@ -323,6 +461,10 @@ public class NetworkManager : MonoBehaviour
         public float[] headRotation;
         public float[] position;
         public float[] rotation;
+        public float[] rightHandPosition;
+        public float[] rightHandRotation;
+        public float[] leftHandPosition;
+        public float[] leftHandRotation;
         public int health;
 
         public static UserJSON CreateFromJSON(string data)

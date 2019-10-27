@@ -102,6 +102,35 @@ io.on('connection', function(socket){
         socket.broadcast.emit('player turn', currentPlayer);
     });
 
+    // ③右手の移動
+    socket.on('right hand move', function(data) {
+        console.log(currentPlayer.name+' recv: right hand move: '+JSON.stringify(data));
+        currentPlayer.rightHandPosition = data.rightHandPosition;
+        socket.broadcast.emit('right hand move', currentPlayer);
+    });
+
+    // ④右手の回転
+    socket.on('right hand turn', function(data) {
+        console.log(currentPlayer.name+' recv: right hand turn: '+JSON.stringify(data));
+        currentPlayer.rightHandRotation = data.rightHandRotation;
+        socket.broadcast.emit('right hand turn', currentPlayer);
+    });
+
+    // ③左手の移動
+    socket.on('left hand move', function(data) {
+        console.log(currentPlayer.name+' recv: left hand move: '+JSON.stringify(data));
+        currentPlayer.leftHandPosition = data.leftHandPosition;
+        socket.broadcast.emit('left hand move', currentPlayer);
+    });
+
+    // ④左手の回転
+    socket.on('left hand turn', function(data) {
+        console.log(currentPlayer.name+' recv: left hand turn: '+JSON.stringify(data));
+        currentPlayer.leftHandRotation = data.leftHandRotation;
+        socket.broadcast.emit('left hand turn', currentPlayer);
+    });
+
+
     // ⑤プレイヤーの接続解除
     socket.on('disconnect', function() {
         console.log(currentPlayer.name+' recv: disconnect '+currentPlayer.name);
