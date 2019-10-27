@@ -271,15 +271,14 @@ public class NetworkManager : MonoBehaviour
     void OnHeadMove(SocketIOEvent socketIOEvent)
     {
         string data = socketIOEvent.data.ToString();
-        UserJSON userJSON = UserJSON.CreateFromJSON(data);
         HeadJSON headJSON = HeadJSON.CreateFromJSON(data);
         Vector3 headPosition = new Vector3(headJSON.headPosition[0], headJSON.headPosition[1], headJSON.headPosition[2]);
-        if (userJSON.name == playerNameInput.text)
+        if (headJSON.name == playerNameInput.text)
         {
             return;
         }
-        GameObject p = GameObject.Find(userJSON.name) as GameObject;
-        GameObject eye = p.transform.Find(userJSON.name + " Eye").gameObject;
+        GameObject p = GameObject.Find(headJSON.name) as GameObject;
+        GameObject eye = p.transform.Find(headJSON.name + " Eye").gameObject;
         if (p != null)
         {
             eye.transform.position = headPosition;
