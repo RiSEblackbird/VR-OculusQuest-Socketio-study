@@ -111,7 +111,7 @@ io.on('connection', function(socket){
     socket.on('head turn', function(data) {
         console.log(currentPlayer.name+' recv: head turn: '+JSON.stringify(data));
         currentPlayer.headRotation = data.headRotation;
-        socket.broadcast.emit('heade turn', currentPlayer);
+        socket.broadcast.emit('head turn', currentPlayer);
     });
 
 

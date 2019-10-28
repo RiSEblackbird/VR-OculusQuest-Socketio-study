@@ -47,6 +47,15 @@ public class MultiPlayerController : MonoBehaviour
         oldLeftHandPosition = oldLeftHand.position;
         oldLeftHandRotation = oldLeftHand.rotation;
 
+        currentHeadPosition = oldHead.position;
+        currentHeadRotation = oldHead.rotation;
+        currentPosition = transform.position;
+        currentRotation = transform.rotation;
+        currentRightHandPosition = oldRightHand.position;
+        currentRightHandRotation = oldRightHand.rotation;
+        currentLeftHandPosition = oldLeftHand.position;
+        currentLeftHandRotation = oldLeftHand.rotation;
+
     }
 
     void Update()
@@ -71,13 +80,13 @@ public class MultiPlayerController : MonoBehaviour
 
         if (currentHeadPosition != oldHeadPosition)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadMove(transform.position);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadMove(currentHead.position);
             oldHeadPosition = currentHeadPosition;
         }
 
         if (currentHeadRotation != oldHeadRotation)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadTurn(transform.rotation);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandHeadTurn(currentHead.rotation);
             oldHeadRotation = currentHeadRotation;
         }
 
@@ -95,25 +104,25 @@ public class MultiPlayerController : MonoBehaviour
         
         if (currentRightHandPosition != oldRightHandPosition)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandMove(transform.position);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandMove(currentRightHand.position);
             oldRightHandPosition = currentRightHandPosition;
         }
 
         if (currentRightHandRotation != oldRightHandRotation)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandTurn(transform.rotation);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandRightHandTurn(currentRightHand.rotation);
             oldRightHandRotation = currentRightHandRotation;
         }
         
         if (currentLeftHandPosition != oldLeftHandPosition)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandMove(transform.position);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandMove(currentLeftHand.position);
             oldLeftHandPosition = currentLeftHandPosition;
         }
 
         if (currentLeftHandRotation != oldLeftHandRotation)
         {
-            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandTurn(transform.rotation);
+            NetworkManager.instance.GetComponent<NetworkManager>().CommandLeftHandTurn(currentLeftHand.rotation);
             oldLeftHandRotation = currentLeftHandRotation;
         }
 

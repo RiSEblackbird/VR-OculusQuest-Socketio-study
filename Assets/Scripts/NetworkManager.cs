@@ -278,7 +278,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(headJSON.name) as GameObject;
-        GameObject eye = p.transform.Find(headJSON.name + " Eye").gameObject;
+        GameObject eye = p.transform.Find("Other Head Avator").gameObject;
         if (p != null)
         {
             eye.transform.position = headPosition;
@@ -296,7 +296,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(headJSON.name) as GameObject;
-        GameObject eye = p.transform.Find(headJSON.name + " Eye").gameObject;
+        GameObject eye = p.transform.Find("Other Head Avator").gameObject;
         if (p != null)
         {
             eye.transform.rotation = headRotation;
@@ -346,7 +346,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(rightHandJSON.name) as GameObject;
-        GameObject orh = p.transform.Find(rightHandJSON.name + " R Hand").gameObject;
+        GameObject orh = p.transform.Find("Other R Hand").gameObject;
         if (p != null)
         {
             orh.transform.position = rightHandPosition;
@@ -364,7 +364,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(rightHandJSON.name) as GameObject;
-        GameObject orh = p.transform.Find(rightHandJSON.name + " R Hand").gameObject;
+        GameObject orh = p.transform.Find("Other R Hand").gameObject;
         if (p != null)
         {
             orh.transform.rotation = rightHandRotation;
@@ -381,7 +381,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(leftHandJSON.name) as GameObject;
-        GameObject olh = p.transform.Find(leftHandJSON.name + " L Hand").gameObject;
+        GameObject olh = p.transform.Find("Other L Hand").gameObject;
         if (p != null)
         {
             olh.transform.position = leftHandPosition;
@@ -399,7 +399,7 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(leftHandJSON.name) as GameObject;
-        GameObject olh = p.transform.Find(leftHandJSON.name + " L Hand").gameObject;
+        GameObject olh = p.transform.Find("Other L Hand").gameObject;
         if (p != null)
         {
             olh.transform.rotation = leftHandRotation;
