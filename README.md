@@ -4,18 +4,18 @@
  - 2019-10-28 am  
   https://twitter.com/RiSE_blackbird/status/1188650229207166976  
 
-基本的に下記掲載の動画のチュートリアルに沿って進める。  
-※Questと書いているが、現状Android用ではなく、Win用のOpenVRアプリ。  
+  基本的に下記掲載の動画のチュートリアルに沿って進める。  
+  ※Questと書いているが、現状Android用ではなく、Win用のOpenVRアプリ。  
 
-**動画との主な相違点(注意点)**
+**動画との主な相違点(注意点)**  
 [ 動画 ] ： [ 今回 ]  
-定点視点 ： 各プレイヤー主観  
-キャラが静的オブジェクトのみで構成 ： 頭部と手が操作で動き回る(基準はプレイヤー本体に追従)  
+  定点視点 ： 各プレイヤー主観  
+  キャラが静的オブジェクトのみで構成 ： 頭部と手が操作で動き回る(基準はプレイヤー本体に追従)  
 
 
 ## 技術構成  
-クライアント：Unity(2019.2.9f1 Personal)  
-サーバサイド：Node.js(v10.16.3), express, Socket.IO  
+クライアント：Unity (2019.2.9f1 Personal)  
+サーバサイド：Node.js (v10.16.3), express, Socket.IO  
 使用言語：C#, JavaScript  
 
 ## Reference video tutorials
@@ -84,7 +84,7 @@ cs : Network Manager.cs
   JSON : PlayerJSON  
 https://www.youtube.com/watch?v=CkHACZsrEvc&t=2s  
 
-**Pt14 ()**  
+**Pt14 (通信パラメータ整備)**  
 cs : Network Manager.cs  
   Event(cs) : *OnPlayerMove, *OnPlayerTurn, *CommandMove, *CommandTurn, *PlayerShoot  
   JSON : PlayerJSON  
