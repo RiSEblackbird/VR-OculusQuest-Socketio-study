@@ -1,29 +1,106 @@
 # VR-OculusQuest-Socketio-study  
 
-基本的に下記掲載の動画のチュートリアルに沿って進める。  
+**キャプチャ動画**  
+ - 2019-10-28 am  
+  https://twitter.com/RiSE_blackbird/status/1188650229207166976  
 
-## Reference tutorial
-### **Unity 5 Multiplayer Networking Node JS socket.io Pt1**  
- - イントロダクション  
+基本的に下記掲載の動画のチュートリアルに沿って進める。  
+※Questと書いているが、現状Android用ではなく、Win用のOpenVRアプリ。  
+
+**動画との主な相違点(注意点)**
+[ 動画 ] ： [ 今回 ]  
+定点視点 ： 各プレイヤー主観  
+キャラが静的オブジェクトのみで構成 ： 頭部と手が操作で動き回る(基準はプレイヤー本体に追従)  
+
+
+## 技術構成  
+クライアント：Unity(2019.2.9f1 Personal)  
+サーバサイド：Node.js(v10.16.3), express, Socket.IO  
+使用言語：C#, JavaScript  
+
+## Reference video tutorials
+**Unity 5 Multiplayer Networking Node JS socket.io Pt1**  
+ イントロダクション(目標アプリの紹介)  
  https://www.youtube.com/watch?v=tn3cWcSYmHE  
-  
-### **Unity 5 Multiplayer Networking Node JS socket.io Pt4**  
- - リアルタイム通信におけるプレイヤー移動の定義  
+
+**Pt2 (自キャラプレハブ)**  
+ *Prefab : *Player(/*Gun, /*HealthBar), *Canvas  
+ https://www.youtube.com/watch?v=sj9MvcJKRZs&t=286s  
+
+**Pt3 (ヘルスバー詳細、敵キャラ、スポーン位置)**  
+ Prefab : HealthBar Canvas, *Eneny, *Bullet  
+ *cs : Enemy/*SpawnPoint.cs, Bullet/Bullet.cs  
+ https://www.youtube.com/watch?v=erDzqBiC2iQ&t=659s  
+
+**Pt4 (ネットワークマネージャ初出、入室フォームパネルの作成、プレイヤー移動の定義)**  
+ Pre : *Join Game Canvas, *Network Manager  
+ cs : HealthBar Canvas/*Billboard.cs, Network Manager/*Network Manager.cs, Player/*PlayerController.cs  
  https://www.youtube.com/watch?v=Vqdlrky4cTM  
 
-### **~Pt7**  
- - ネットワークマネージャー  
+**Pt5 (プレイヤー発砲, 体力値、デス消滅、リスポーン)**  
+ cs : Player/*Health.cs  
+ https://www.youtube.com/watch?v=4YauRosgN0k  
+
+**Pt6 (Bullet.csの詳細, 敵スポーン位置の詳細)**  
+ cs : Enemy/*EnemySpawner.cs  
+ https://www.youtube.com/watch?v=jy6kqSQ7IPs  
+
+**Pt7 (ヘルスバーのダメージ挙動調整、体力ゼロ敵の消滅、プレイヤースポーン位置, PlayerJSON)**  
+ cs : Player/*PlayerSpawner.cs, Network Manager.cs  
  https://www.youtube.com/watch?v=0jmUQ0ErAyU  
 
-### **~Pt8**
- - 各種JSONの定義(プレイヤーや敵の位置、体力、射撃など)　※現状自環境ではプレイヤーの位置関係のみ実装。
+**Pt8 (通信パラメータを格納するJSONの定義)**  
+ cs : Network Manager.cs  
+   *JSON : *PointJSON, *PlayerJSON, *PositionJSON, *RotationJSON, *UserJSON, *HealthChangeJSON, *EnemiesJSON, *ShootJSON,  *UserHealthJSON  
  https://www.youtube.com/watch?v=oYucBRfjyRE  
 
-### **~Pt9,Pt10**
- - node.js, expressでゲームサーバーを立てる  
- - 通信する、接続、切断、プレイヤーの移動、回転、敵キャラ、体力などのJSON定義  
+**Pt9 (ローカルサーバー、ランダム文字列)**  
+ *js : *index.js  
+   *Event(js) : *connection, *playerconnect, *play, *enemies  
  https://www.youtube.com/watch?v=HKyl2wSShFM  
+
+**Pt10 (ローカルサーバー続き)**  
+ js : index.js  
+   Event(js) : *player move, *player turn, *player shoot, *health, *disconnect  
  https://www.youtube.com/watch?v=qx_zEFeMtvA  
+
+ **Pt11 (Asset : "Socket IO for Unity"の導入、URLの設定、Network Manager.cs側でのイベント設定、IEnumerator詳細)**  
+ Asset : "Socket IO for Unity"  
+ cs : Network Manager.cs  
+   Event(cs) : *OnOtherPlayerConnected, OnPlay  
+ https://www.youtube.com/watch?v=h6JISqIuVRc  
+
+**Pt12 (敵スポーン位置の通信、参戦ボタン"Button"の設定)**  
+cs : EnemySpawner.cs  
+  Event(cs) : *SpawnEnemies  
+cs : Network Manager.cs  
+  Event(cs) : *OnEnemies  
+Pre : Join Game Canvas, Network Manager  
+ https://www.youtube.com/watch?v=I33fOjqhWIQ  
+
+**Pt13 (PlayerJSON修正、OnPlay修正)**  
+cs : Network Manager.cs  
+  Event(cs) : OnPlay, OnOtherPlayerDisconnected  
+  JSON : PlayerJSON  
+https://www.youtube.com/watch?v=CkHACZsrEvc&t=2s  
+
+**Pt14 ()**  
+cs : Network Manager.cs  
+  Event(cs) : *OnPlayerMove, *OnPlayerTurn, *CommandMove, *CommandTurn, *PlayerShoot  
+  JSON : PlayerJSON  
+cs : PlayerController.cs(NetworkManagerにpositionやrotatuionの値を送る)  
+  Event(cs) : *CmdFire  
+https://www.youtube.com/watch?v=WfT_ZbxaKgs10000  
+
+**Pt15 (自ダメージ)**  
+cs : Network Manager.cs  
+  Event(cs) : *OnHealth, CommandHealthChange  
+cs : Health.cs(*TakeDamage, OnChangeHealth)  
+https://www.youtube.com/watch?v=fnKp7W-W_o8&t=678s  
+
+**Pt16 (敵スポーン調整)**  
+cs : EnemySpawner.cs(SpawnEnemies)  
+https://www.youtube.com/watch?v=IxkFFJ6t8OY&t=234s  
 
 ## Reference articles  
 **C#, IEnumeratorとIEnumerableを調べた**  
