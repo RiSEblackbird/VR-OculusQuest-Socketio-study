@@ -404,14 +404,28 @@ public class NetworkManager : MonoBehaviour
     {
         public string name;
         public List<PointJSON> playerSpawnPoints;
-        
-        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints)
+        public List<PointJSON> enemySpawnerPoints;
+        public List<PointJSON> wakizashiSpawnPoints;
+
+        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints, List<SpawnPoint> _enemySpawnerPoints, List<SpawnPoint> _wakizashiSpawnPoints)
         {
             playerSpawnPoints = new List<PointJSON>();
+            enemySpawnerPoints = new List<PointJSON>();
+            wakizashiSpawnPoints = new List<PointJSON>();
             name = _name;
             foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(playerSpawnPoint);
+                playerSpawnPoints.Add(pointJSON);
+            }
+            foreach (SpawnPoint enemySpawnerPoint in _enemySpawnerPoints)
+            {
+                PointJSON pointJSON = new PointJSON(enemySpawnerPoint);
+                playerSpawnPoints.Add(pointJSON);
+            }
+            foreach (SpawnPoint wakizashiSpawnPoint in _playerSpawnPoints)
+            {
+                PointJSON pointJSON = new PointJSON(wakizashiSpawnPoint);
                 playerSpawnPoints.Add(pointJSON);
             }
         }
@@ -582,18 +596,22 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
-    public class UserHealthJSON
+    public class HealthChangeJSON
     {
         public string name;
-        public int health;
+        public int healthChange;
+        public string from;
+        public bool isEnemy;
 
-        public static UserHealthJSON CreateFromJSON(string data)
+        public HealthChangeJSON(string _name, int _healthChange, string _from, bool _isEnemy)
         {
-            return JsonUtility.FromJson<UserHealthJSON>(data);
+            name = _name;
+            healthChange = _healthChange;
+            from = _from;
+            isEnemy = _isEnemy;
         }
     }
 
-    /*
     [Serializable]
     public class EnemiesJSON
     {
@@ -604,7 +622,30 @@ public class NetworkManager : MonoBehaviour
             return JsonUtility.FromJson<EnemiesJSON>(data);
         }
     }
+    /*
+    [Serializable]
+    public class ShootJSON
+    {
+        public string name;
+
+        public static ShootJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<ShootJSON>(data);
+        }
+
+    }
     */
+    [Serializable]
+    public class UserHealthJSON
+    {
+        public string name;
+        public int health;
+
+        public static UserHealthJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<UserHealthJSON>(data);
+        }
+    }
 
     #endregion
 }
