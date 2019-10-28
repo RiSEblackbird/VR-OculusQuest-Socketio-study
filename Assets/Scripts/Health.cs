@@ -8,14 +8,13 @@ public class Health : MonoBehaviour
     public bool destroyOnDeath;
 
     public int currentHealth = maxHealth;
-    // public bool isEnemy = false;
+    public bool isEnemy = false;
 
     public RectTransform healthBar;
 
     private bool isLocalPlayer;
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void Start ()
     {
         MultiPlayerController pc = GetComponent<MultiPlayerController>();
         isLocalPlayer = pc.isLocalPlayer;
