@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2934967753152730805}
   - component: {fileID: 2934967753152730804}
   - component: {fileID: 2934967753152730807}
+  - component: {fileID: 6882325979585354419}
+  - component: {fileID: 1279127410447118875}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -49,7 +51,6 @@ MonoBehaviour:
   playerNameInput: {fileID: 0}
   player: {fileID: 939603406337776409, guid: 36912e6d45a4e86419e65e8b8979c304, type: 3}
   startMenuCamera: {fileID: 0}
-  MyMainCamera: {fileID: 0}
 --- !u!114 &2934967753152730807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,3 +64,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpawnPoints: []
+--- !u!114 &6882325979585354419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2934967753152730806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65740f929702d044d9c9d3879df76e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Enemy: {fileID: 6336150308012984285, guid: ca055e6419182bd41b4ecf5d6329a0e8, type: 3}
+  spawnPoint: {fileID: 0}
+  numberOfEnemyi: 5
+  EnemySpawnPoints: []
+--- !u!114 &1279127410447118875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2934967753152730806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ccf5f32c03fda448a5674ebc60d1fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wakizashi: {fileID: 1688795477940768938, guid: fe941e3719227414782a2e97ea344875,
+    type: 3}
+  spawnPoint: {fileID: 0}
+  numberOfwakizashi: 5
+  wakizashiSpawnPoints: []
