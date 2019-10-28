@@ -142,14 +142,14 @@ public class MultiPlayerController : MonoBehaviour
             transform.position -= forward.normalized * Time.deltaTime;
         }
 
-        // 追記：Left move
+        // Left move
         if (Input.GetKey(KeyCode.A) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickLeft))
         {
             var right = currentHead.right;
             right.y = 0;
             transform.position -= right.normalized * Time.deltaTime;
         }
-        // 追記：Right move
+        // Right move
         if (Input.GetKey(KeyCode.D) || OVRInput.Get(OVRInput.Button.PrimaryThumbstickRight))
         {
             var right = currentHead.right;

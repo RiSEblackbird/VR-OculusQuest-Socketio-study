@@ -131,7 +131,6 @@ public class NetworkManager : MonoBehaviour
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
         Vector3 position = new Vector3(userJSON.position[0], userJSON.position[1], userJSON.position[2]);
         Quaternion rotation = Quaternion.Euler(userJSON.rotation[0], userJSON.rotation[1], userJSON.rotation[2]);
-
         GameObject o = GameObject.Find(userJSON.name) as GameObject;
         if (o != null)
         {
@@ -144,7 +143,6 @@ public class NetworkManager : MonoBehaviour
         OtherRightHand.gameObject.SetActive(true);
         GameObject OtherLeftHand = p.transform.Find("Other L Hand").gameObject;
         OtherLeftHand.gameObject.SetActive(true);
-
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t = p.transform.Find("Healthbar Canvas");
         Transform t1 = t.transform.Find("Player Name"); 
@@ -152,7 +150,6 @@ public class NetworkManager : MonoBehaviour
         playerName.text = userJSON.name;
         pc.isLocalPlayer = false;
         p.name = userJSON.name;
-        
         Health h = p.GetComponent<Health>();
         h.currentHealth = userJSON.health;
         h.OnChangeHealth();
@@ -162,7 +159,6 @@ public class NetworkManager : MonoBehaviour
     void OnOtherPlayerHead(SocketIOEvent socketIOEvent)
     {
         string data = socketIOEvent.data.ToString();
-        
         HeadJSON headJSON = HeadJSON.CreateFromJSON(data);
         Vector3 headPosition = new Vector3(headJSON.headPosition[0], headJSON.headPosition[1], headJSON.headPosition[2]);
         Quaternion headRotation = Quaternion.Euler(headJSON.headRotation[0], headJSON.headRotation[1], headJSON.headRotation[2]);
@@ -173,18 +169,15 @@ public class NetworkManager : MonoBehaviour
         }
         GameObject p = GameObject.Find(headJSON.name) as GameObject;
         GameObject EyeCamera = p.transform.Find("Other Head Avator").gameObject;
-        
         GameObject ec = Instantiate(EyeCamera, headPosition, headRotation) as GameObject;
         ec.transform.parent = p.transform;
         p.name = headJSON.name;
-        ec.name = headJSON.name + " Eye";
         EyeCamera.gameObject.SetActive(false);
     }
 
     void OnOtherPlayerRightHand(SocketIOEvent socketIOEvent)
     {
         string data = socketIOEvent.data.ToString();
-        
         RightHandJSON rightHandJSON = RightHandJSON.CreateFromJSON(data);
         Vector3 rightHandPosition = new Vector3(rightHandJSON.rightHandPosition[0], rightHandJSON.rightHandPosition[1], rightHandJSON.rightHandPosition[2]);
         Quaternion rightHandRotation = Quaternion.Euler(rightHandJSON.rightHandRotation[0], rightHandJSON.rightHandRotation[1], rightHandJSON.rightHandRotation[2]);
@@ -195,20 +188,16 @@ public class NetworkManager : MonoBehaviour
         }
         GameObject p = GameObject.Find(rightHandJSON.name) as GameObject;
         GameObject OtherRightHand = p.transform.Find("Other R Hand").gameObject;
-        
         GameObject orh = Instantiate(OtherRightHand, rightHandPosition, rightHandRotation) as GameObject;
         orh.transform.parent = p.transform;
         p.name = rightHandJSON.name;
-        orh.name = rightHandJSON.name + " R Hand";
         OtherRightHand.gameObject.SetActive(false);
-
 
     }
 
     void OnOtherPlayerLeftHand(SocketIOEvent socketIOEvent)
     {
         string data = socketIOEvent.data.ToString();
-        
         LeftHandJSON leftHandJSON = LeftHandJSON.CreateFromJSON(data);
         Vector3 leftHandPosition = new Vector3(leftHandJSON.leftHandPosition[0], leftHandJSON.leftHandPosition[1], leftHandJSON.leftHandPosition[2]);
         Quaternion leftHandRotation = Quaternion.Euler(leftHandJSON.leftHandRotation[0], leftHandJSON.leftHandRotation[1], leftHandJSON.leftHandRotation[2]);
@@ -218,13 +207,10 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         GameObject p = GameObject.Find(leftHandJSON.name) as GameObject;
-        
         GameObject OtherLeftHand = p.transform.Find("Other L Hand").gameObject;
-        
         GameObject olh = Instantiate(OtherLeftHand, leftHandPosition, leftHandRotation) as GameObject;
         olh.transform.parent = p.transform;
         p.name = leftHandJSON.name;
-        olh.name = leftHandJSON.name + " L Hand";
         OtherLeftHand.gameObject.SetActive(false);
 
     }
@@ -239,15 +225,6 @@ public class NetworkManager : MonoBehaviour
         UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
         Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
         Quaternion rotation = Quaternion.Euler(currentUserJSON.rotation[0], currentUserJSON.rotation[1], currentUserJSON.rotation[2]);
-
-        /*
-        Vector3 headPosition = new Vector3(currentUserJSON.headPosition[0], currentUserJSON.headPosition[1], currentUserJSON.headPosition[2]);
-        Quaternion headRotation = Quaternion.Euler(currentUserJSON.headRotation[0], currentUserJSON.headRotation[1], currentUserJSON.headRotation[2]);
-        Vector3 rightHandPosition = new Vector3(currentUserJSON.rightHandPosition[0], currentUserJSON.rightHandPosition[1], currentUserJSON.rightHandPosition[2]);
-        Quaternion rightHandRotation = Quaternion.Euler(currentUserJSON.rightHandRotation[0], currentUserJSON.rightHandRotation[1], currentUserJSON.rightHandRotation[2]);
-        Vector3 leftHandPosition = new Vector3(currentUserJSON.leftHandPosition[0], currentUserJSON.leftHandPosition[1], currentUserJSON.leftHandPosition[2]);
-        Quaternion leftHandRotation = Quaternion.Euler(currentUserJSON.leftHandRotation[0], currentUserJSON.leftHandRotation[1], currentUserJSON.leftHandRotation[2]);
-        */
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t = p.transform.Find("Healthbar Canvas");
@@ -256,15 +233,8 @@ public class NetworkManager : MonoBehaviour
         playerName.text = currentUserJSON.name;
         pc.isLocalPlayer = true;
         p.name = currentUserJSON.name;
-
         GameObject Eye = p.transform.Find("OVRCameraRig").gameObject;
-        // GameObject TrackingSpace = OVRCameraRig.transform.Find("TrackingSpace").gameObject;
-        // GameObject Eye = p.transform.Find("OVRCamera/TrackingSpace/RigCenterEyeAnchor").gameObject;
-        // GameObject RightHand = OVRCameraRig.transform.Find("DistanceGrabHandRight").gameObject;
-        // GameObject LeftHand = OVRCameraRig.transform.Find("DistanceGrabHandLeft").gameObject;
         Eye.gameObject.SetActive(true);
-        // RightHand.gameObject.SetActive(true);
-        // LeftHand.gameObject.SetActive(true);
         
     }
 
@@ -425,7 +395,6 @@ public class NetworkManager : MonoBehaviour
         Destroy(GameObject.Find(userJSON.name));
     }
     
-
     #endregion
 
     #region JSONMessageClasses
@@ -602,14 +571,8 @@ public class NetworkManager : MonoBehaviour
     public class UserJSON
     {
         public string name;
-        // public float[] headPosition;
-        // public float[] headRotation;
         public float[] position;
         public float[] rotation;
-        // public float[] rightHandPosition;
-        // public float[] rightHandRotation;
-        // public float[] leftHandPosition;
-        // public float[] leftHandRotation;
         public int health;
 
         public static UserJSON CreateFromJSON(string data)

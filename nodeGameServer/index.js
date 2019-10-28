@@ -18,17 +18,15 @@ io.on('connection', function(socket){
     var currentPlayer = {};
     currentPlayer.name = 'unknown';
 
-    // ①プレイヤーの接続
+    // プレイヤーの接続
     socket.on('player connect', function(){
         console.log(currentPlayer.name+' recv: player connect');
         // すべてのクライアントについて名前と位置と回転を定義
         for(var i=0; i<clients.length; i++) {
             var playerConnected = {
                 name:clients[i].name,
-                
                 position:clients[i].position,
                 rotation:clients[i].rotation,
-
                 health:clients[i].health
             };
 
@@ -54,6 +52,7 @@ io.on('connection', function(socket){
             socket.emit('other player head', connectedHead);
             socket.emit('other player right hand', connectedRightHand);
             socket.emit('other player left hand', connectedLeftHand);
+
             // 接続された」プレイヤーの情報を表示
             console.log(currentPlayer.name+' emit: other player connected: '+JSON.stringify(playerConnected));
             console.log(currentPlayer.name+' emit: other player head: '+JSON.stringify(connectedHead));
@@ -62,7 +61,7 @@ io.on('connection', function(socket){
         }
     });
 
-    // ②ゲームプレイ中の通信
+    // ゲームプレイ中の通信
     socket.on('play', function(data){
         console.log(currentPlayer.name+' recv: play: '+JSON.stringify(data));
 
@@ -100,14 +99,14 @@ io.on('connection', function(socket){
         socket.broadcast.emit('other player connected', currentPlayer);
     });
 
-    // ③ヘッドの移動
+    // ヘッドの移動
     socket.on('head move', function(data) {
         console.log(currentPlayer.name+' recv: head move: '+JSON.stringify(data));
         currentPlayer.headPosition = data.headPosition;
         socket.broadcast.emit('head move', currentPlayer);
     });
 
-    // ④ヘッドの回転
+    // ヘッドの回転
     socket.on('head turn', function(data) {
         console.log(currentPlayer.name+' recv: head turn: '+JSON.stringify(data));
         currentPlayer.headRotation = data.headRotation;
@@ -115,42 +114,42 @@ io.on('connection', function(socket){
     });
 
 
-    // ③プレイヤーの移動
+    // プレイヤーの移動
     socket.on('player move', function(data) {
         console.log(currentPlayer.name+' recv: move: '+JSON.stringify(data));
         currentPlayer.position = data.position;
         socket.broadcast.emit('player move', currentPlayer);
     });
 
-    // ④プレイヤーの回転
+    // プレイヤーの回転
     socket.on('player turn', function(data) {
         console.log(currentPlayer.name+' recv: turn: '+JSON.stringify(data));
         currentPlayer.rotation = data.rotation;
         socket.broadcast.emit('player turn', currentPlayer);
     });
 
-    // ③右手の移動
+    // 右手の移動
     socket.on('right hand move', function(data) {
         console.log(currentPlayer.name+' recv: right hand move: '+JSON.stringify(data));
         currentPlayer.rightHandPosition = data.rightHandPosition;
         socket.broadcast.emit('right hand move', currentPlayer);
     });
 
-    // ④右手の回転
+    // 右手の回転
     socket.on('right hand turn', function(data) {
         console.log(currentPlayer.name+' recv: right hand turn: '+JSON.stringify(data));
         currentPlayer.rightHandRotation = data.rightHandRotation;
         socket.broadcast.emit('right hand turn', currentPlayer);
     });
 
-    // ③左手の移動
+    // 左手の移動
     socket.on('left hand move', function(data) {
         console.log(currentPlayer.name+' recv: left hand move: '+JSON.stringify(data));
         currentPlayer.leftHandPosition = data.leftHandPosition;
         socket.broadcast.emit('left hand move', currentPlayer);
     });
 
-    // ④左手の回転
+    // 左手の回転
     socket.on('left hand turn', function(data) {
         console.log(currentPlayer.name+' recv: left hand turn: '+JSON.stringify(data));
         currentPlayer.leftHandRotation = data.leftHandRotation;
@@ -158,7 +157,7 @@ io.on('connection', function(socket){
     });
 
 
-    // ⑤プレイヤーの接続解除
+    // プレイヤーの接続解除
     socket.on('disconnect', function() {
         console.log(currentPlayer.name+' recv: disconnect '+currentPlayer.name);
         socket.broadcast.emit('other player disconnected', currentPlayer);
@@ -171,7 +170,7 @@ io.on('connection', function(socket){
         }
     });
 
-    // ⑥キャラクターの体力
+    // キャラクターの体力
     socket.on('health', function(data) {
         console.log(currentPlayer.name+' bcst: health: '+JSON.stringify(data));
         if(data.from === currentPlayer.name) {
