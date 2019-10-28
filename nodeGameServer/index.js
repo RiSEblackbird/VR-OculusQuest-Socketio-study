@@ -67,6 +67,18 @@ io.on('connection', function(socket){
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
+            numberOfEnemies = data.enemySpawnPoints.length;
+            enemies = [];
+            data.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
+                var enemy = {
+                    name: guid(),
+                    position: enemySpawnPoint.position,
+                    rotation: enemySpawnPoint.rotation,
+                    health: 100
+                };
+                enemies.push(enemy);
+            });
+
             playerSpawnPoints = [];
             data.playerSpawnPoints.forEach(function(_playerSpawnPoint) {
                 var playerSpawnPoint = {
