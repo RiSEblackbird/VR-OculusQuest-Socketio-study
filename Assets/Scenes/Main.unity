@@ -12735,7 +12735,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -19111,6 +19111,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9cecc930cc20b74fa2f2505bee69324, type: 3}
+--- !u!1 &2026903812 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1179181789836534742, guid: 7b81faa42dbd0a040a9427b6a3cfb41b,
+    type: 3}
+  m_PrefabInstance: {fileID: 820326695}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2027089852 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 0bd7b40e5b828884dbc8f918b741f871,
@@ -19675,7 +19681,7 @@ Transform:
   - {fileID: 139104728}
   - {fileID: 1812136059}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2129236145
 PrefabInstance:
@@ -20106,7 +20112,7 @@ PrefabInstance:
     - target: {fileID: 2934967753152730805, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2934967753152730805, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
@@ -20199,6 +20205,26 @@ PrefabInstance:
       propertyPath: MyMainCamera
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6882325979585354419, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: numberOfEnemyi
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6882325979585354419, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 2026903812}
+    - target: {fileID: 1279127410447118875, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: numberOfwakizashi
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279127410447118875, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 2026903812}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe, type: 3}
 --- !u!114 &2934967753122204867 stripped
