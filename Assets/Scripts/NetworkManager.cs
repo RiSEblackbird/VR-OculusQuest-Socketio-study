@@ -28,7 +28,8 @@ public class NetworkManager : MonoBehaviour
     
     void Start()
     {
-        // socket.On("enemies", OnEnemies);
+        socket.On("enemies", OnEnemies);
+        socket.On("wakizashis", OnEnemies);
         socket.On("other player connected", OnOtherPlayerConnected);
         socket.On("other player head", OnOtherPlayerHead);
         socket.On("other player right hand", OnOtherPlayerRightHand);
@@ -64,7 +65,7 @@ public class NetworkManager : MonoBehaviour
 
         string playerName = playerNameInput.text;
         List<SpawnPoint> playerSpawnPoints = GetComponent<PlayerSpawner>().playerSpawnPoints;
-        List<SpawnPoint> enemySpawnPoints = GetComponent<EnemySpawner>().EnemySpawnPoints;
+        List<SpawnPoint> enemySpawnPoints = GetComponent<EnemySpawner>().enemySpawnPoints;
         List<SpawnPoint> wakizashiSpawnPoints = GetComponent<WakizashiSpawner>().wakizashiSpawnPoints;
         PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints, enemySpawnPoints, wakizashiSpawnPoints);
         GameObject startMenuCamera = GetComponent<GameObject>();
@@ -124,6 +125,20 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Listening
+
+    void OnEnemies(SocketIOEvent socketIOEvent)
+    {
+        EnemiesJSON enemiesJSON = EnemiesJSON.CreateFromJSON(socketIOEvent.data.ToString());
+        EnemySpawner es = GetComponent<EnemySpawner>();
+        es.SpawnEnemies(enemiesJSON);
+    }
+
+    void OnWakizashis(SocketIOEvent socketIOEvent)
+    {
+        WakizashisJSON wakizashisJSON = WakizashisJSON.CreateFromJSON(socketIOEvent.data.ToString());
+        WakizashiSpawner ws = GetComponent<WakizashiSpawner>();
+        ws.SpawnWakizashis(wakizashisJSON);
+    }
 
     void OnOtherPlayerConnected(SocketIOEvent socketIOEvent)
     {
@@ -422,12 +437,12 @@ public class NetworkManager : MonoBehaviour
             foreach (SpawnPoint enemySpawnPoint in _enemySpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(enemySpawnPoint);
-                playerSpawnPoints.Add(pointJSON);
+                enemySpawnPoints.Add(pointJSON);
             }
             foreach (SpawnPoint wakizashiSpawnPoint in _wakizashiSpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(wakizashiSpawnPoint);
-                playerSpawnPoints.Add(pointJSON);
+                wakizashiSpawnPoints.Add(pointJSON);
             }
         }
     }
@@ -616,6 +631,11 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class EnemiesJSON
     {
+        public string name;
+        public float[] position;
+        public float[] rotation;
+        public int health;
+
         public List<UserJSON> enemies;
 
         public static EnemiesJSON CreateFromJSON(string data)
@@ -627,6 +647,11 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class WakizashisJSON
     {
+        public string name;
+        public float[] position;
+        public float[] rotation;
+        public int health;
+
         public List<UserJSON> wakizashis;
 
         public static WakizashisJSON CreateFromJSON(string data)

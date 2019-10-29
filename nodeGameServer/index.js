@@ -5,6 +5,7 @@ var io = require('socket.io')(server);
 server.listen(3000);
 
 var enemies = [];
+var wakizashis = [];
 var playerSpawnPoints = [];
 var clients = [];
 
@@ -67,17 +68,6 @@ io.on('connection', function(socket){
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
-            numberOfEnemies = data.enemySpawnPoints.length;
-            enemies = [];
-            data.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
-                var enemy = {
-                    name: guid(),
-                    position: enemySpawnPoint.position,
-                    rotation: enemySpawnPoint.rotation,
-                    health: 100
-                };
-                enemies.push(enemy);
-            });
 
             playerSpawnPoints = [];
             data.playerSpawnPoints.forEach(function(_playerSpawnPoint) {
@@ -87,6 +77,31 @@ io.on('connection', function(socket){
                 };
                 playerSpawnPoints.push(playerSpawnPoint);
             });
+
+            numberOfEnemies = data.enemySpawnPoints.length;
+            enemies = [];
+            data.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
+                var enemy = {
+                    name: guid(),
+                    position: _enemySpawnPoint.position,
+                    rotation: _enemySpawnPoint.rotation,
+                    health: 100
+                };
+                enemies.push(enemy);
+            });
+
+            numberOfWakizashis = data.wakizashiSpawnPoints.length;
+            wakizashis = [];
+            data.wakizashiSpawnPoints.forEach(function(_wakizashiSpawnPoint) {
+                var wakizashi = {
+                    name: guid(),
+                    position: _wakizashiSpawnPoint.position,
+                    rotation: _wakizashiSpawnPoint.rotation,
+                    health: 100
+                };
+                wakizashis.push(wakizashi);
+            });
+
         }
 
         var enemiesResponse = {
@@ -101,6 +116,20 @@ io.on('connection', function(socket){
             position: randamSpawnPoint.position,
             rotation: randamSpawnPoint.rotation
         };
+
+        var wakizashisResponse = {
+            wakizashis: wakizashis
+        };
+
+        console.log(currentPlayer.name+' emit: wakizashis: '+JSON.stringify(wakizashisResponse));
+        socket.emit('wakizashis', wakizashisResponse);
+        var randamSpawnPoint = playerSpawnPoints[Math.floor(Math.random() * playerSpawnPoints.length)];
+        currentPlayer = {
+            name: data.name,
+            position: randamSpawnPoint.position,
+            rotation: randamSpawnPoint.rotation
+        };
+
 
         // クライアントの列に現在接続したプレイヤーを加える
         clients.push(currentPlayer);
