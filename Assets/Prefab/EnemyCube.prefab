@@ -5527,7 +5527,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336150308351019591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d484b521cc1fb64d8677b37c7a7e743, type: 3}
   m_Name: 
@@ -5576,7 +5576,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336150308351019591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 659aeddd317af65489fd41502bfcaa0c, type: 3}
   m_Name: 
@@ -5798,6 +5798,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Healthbar Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4980355261658917259, guid: e8d61d9baf88cf749a15e6387e6748d3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8418608623414202362, guid: e8d61d9baf88cf749a15e6387e6748d3,
         type: 3}
