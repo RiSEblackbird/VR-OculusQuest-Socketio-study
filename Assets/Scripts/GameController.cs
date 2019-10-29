@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject Reticle;
     public GameObject winnerLabelObject;
     public GameObject RetryButton;
+    
 
     public void Update ()
     {
@@ -26,14 +27,23 @@ public class GameController : MonoBehaviour
         }
 
         /*
+        if (OVRInput.Get(OVRInput.Button.Three) || Input.GetKey(KeyCode.K))
+        {
+            EnemySpawner es = GetComponent<EnemySpawner>();
+            es.SpawnEnemies(EnemiesJSON);
+        }
+        */
+        /*
         if (count == 0) {
             // オブジェクトをアクティブにする
             winnerLabelObject.SetActive(true);
             Reticle.SetActive(false);
         }
         */
+
     }
 
+    
     public void OnRetry ()
     {
         SceneManager.LoadScene(
