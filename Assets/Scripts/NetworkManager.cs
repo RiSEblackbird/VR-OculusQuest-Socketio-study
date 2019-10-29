@@ -131,6 +131,8 @@ public class NetworkManager : MonoBehaviour
         EnemiesJSON enemiesJSON = EnemiesJSON.CreateFromJSON(socketIOEvent.data.ToString());
         EnemySpawner es = GetComponent<EnemySpawner>();
         es.SpawnEnemies(enemiesJSON);
+        ChaseTarget ct = GetComponent<ChaseTarget>();
+        ct.isLocalEnemy = true;
     }
 
     void OnWakizashis(SocketIOEvent socketIOEvent)
