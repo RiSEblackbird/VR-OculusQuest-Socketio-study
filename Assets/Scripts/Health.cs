@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
 
     public int currentHealth = maxHealth;
     public bool isEnemy = false;
+    public bool isWeapon = false;
 
     public RectTransform healthBar;
 

@@ -22,20 +22,26 @@ public class WakizashiSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnEnemies()
+    public void SpawnWakizashis(NetworkManager.WakizashisJSON wakizashisJSON)
     {
-        int i = 0;
-        foreach (SpawnPoint sp in wakizashiSpawnPoints)
+        foreach (NetworkManager.UserJSON wakizashiJSON in wakizashisJSON.wakizashis)
         {
-            Vector3 position = sp.transform.position;
-            Quaternion rotation = sp.transform.rotation;
+            if (wakizashiJSON.health <= 0)
+            {
+                continue;
+            }
+            Vector3 position = new Vector3(wakizashiJSON.position[0], wakizashiJSON.position[1], wakizashiJSON.position[2]);
+            Quaternion rotation = Quaternion.Euler(wakizashiJSON.rotation[0], wakizashiJSON.rotation[1], wakizashiJSON.rotation[2]);
             GameObject newWakizashi = Instantiate(wakizashi, position, rotation) as GameObject;
-            newWakizashi.name = i+"";
+            newWakizashi.name = wakizashiJSON.name;
             MultiPlayerController pc = newWakizashi.GetComponent<MultiPlayerController>();
             pc.isLocalPlayer = false;
-            // Damage????
-            i++;
+            Health h = newWakizashi.GetComponent<Health>();
+            h.currentHealth = 100;
+            h.OnChangeHealth();
+            h.destroyOnDeath = true;
+            h.isWeapon = true;
         }
     }
-    
+
 }
