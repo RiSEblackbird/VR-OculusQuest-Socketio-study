@@ -7336,7 +7336,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &711045053
 PrefabInstance:
@@ -12752,7 +12752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 010d39cbd03ee4c99a746c1f8ecdc0d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -19712,7 +19712,7 @@ Transform:
   - {fileID: 139104728}
   - {fileID: 1812136059}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2129236145
 PrefabInstance:
@@ -20016,6 +20016,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 89114089}
     m_Modifications:
+    - target: {fileID: 5080780304159901733, guid: 8558500eb6107a245893083d2fa50a1a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2047550238670509841, guid: 8558500eb6107a245893083d2fa50a1a,
         type: 3}
       propertyPath: m_Name
@@ -20141,6 +20146,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: JoinGame
       objectReference: {fileID: 0}
+    - target: {fileID: 7848166291116072800, guid: 8558500eb6107a245893083d2fa50a1a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8558500eb6107a245893083d2fa50a1a, type: 3}
 --- !u!224 &2047550237136097058 stripped
@@ -20162,7 +20172,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047550237136097059}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7aaf960227867044282d921171d2d7ac, type: 3}
   m_Name: 
@@ -20422,6 +20432,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6882325979585354419, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1279127410447118875, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: numberOfwakizashi
@@ -20570,7 +20585,7 @@ PrefabInstance:
     - target: {fileID: 3525322446921882409, guid: c1102252b05b9884d97b7d9fc966354e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3525322446921882409, guid: c1102252b05b9884d97b7d9fc966354e,
         type: 3}

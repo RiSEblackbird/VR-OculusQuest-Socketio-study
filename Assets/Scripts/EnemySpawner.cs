@@ -7,10 +7,11 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemy;
     public GameObject spawnPoint;
     public int numberOfEnemyi;
+    public int health;
     [HideInInspector]
     public List<SpawnPoint> enemySpawnPoints;
 
-    void Start()
+    public void GenerateSpownPoints ()
     {
         for (int i = 0; i < numberOfEnemyi; i++)
         {
@@ -22,9 +23,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void SpawnEnemies(NetworkManager.EnemiesJSON enemiesJSON)
+    public void SpawnEnemies(NetworkManager.EnemyJSON enemiesJSON)
     {
-        foreach (NetworkManager.UserJSON enemyJSON in enemiesJSON.enemies)
+        foreach (NetworkManager.EnemyJSON enemyJSON in enemiesJSON.enemies)
         {
             if (enemyJSON.health <= 0)
             {
@@ -37,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
             MultiPlayerController pc = newEnemy.GetComponent<MultiPlayerController>();
             pc.isLocalPlayer = false;
             Health h = newEnemy.GetComponent<Health>();
-            h.currentHealth = enemyJSON.health;
+            h.currentHealth = health;
             h.OnChangeHealth();
             h.destroyOnDeath = true;
             h.isEnemy = true;

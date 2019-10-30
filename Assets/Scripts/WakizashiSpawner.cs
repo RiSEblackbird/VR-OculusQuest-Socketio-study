@@ -9,8 +9,8 @@ public class WakizashiSpawner : MonoBehaviour
     public int numberOfwakizashi;
     [HideInInspector]
     public List<SpawnPoint> wakizashiSpawnPoints;
-    
-    void Start()
+
+    public void GenerateSpownPoints()
     {
         for (int i = 0; i < numberOfwakizashi; i++)
         {
@@ -22,9 +22,9 @@ public class WakizashiSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnWakizashis(NetworkManager.WakizashisJSON wakizashisJSON)
+    public void SpawnWakizashis(NetworkManager.WakizashiJSON wakizashisJSON)
     {
-        foreach (NetworkManager.UserJSON wakizashiJSON in wakizashisJSON.wakizashis)
+        foreach (NetworkManager.WakizashiJSON wakizashiJSON in wakizashisJSON.wakizashis)
         {
             if (wakizashiJSON.health <= 0)
             {

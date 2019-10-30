@@ -5381,7 +5381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6336150308012984099}
   - component: {fileID: 369790218885828748}
-  - component: {fileID: 7805847894940036927}
+  - component: {fileID: 2425295918057329050}
   m_Layer: 0
   m_Name: EnemyCube
   m_TagString: Untagged
@@ -5416,7 +5416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff2fca8469b6564c8649f4624324840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7805847894940036927
+--- !u!114 &2425295918057329050
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5425,13 +5425,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6336150308012984285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc438a970766ec34d959b9d1befa1f76, type: 3}
+  m_Script: {fileID: 11500000, guid: de3a40c3f1d5bbe429abdab487911874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Angle: 1
-  DashSpeed: 5
-  SlowSpeed: 1.5
-  isLocalPlayer: 0
+  target: {fileID: 0}
+  speed: 1
+  isLocalEnemy: 0
 --- !u!1 &6336150308351019591
 GameObject:
   m_ObjectHideFlags: 0
@@ -5557,13 +5556,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336150308351019591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d484b521cc1fb64d8677b37c7a7e743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 939603406337935159, guid: 36912e6d45a4e86419e65e8b8979c304, type: 3}
   speed: 0.01
+  isLocalEnemy: 0
 --- !u!114 &8955727822573832050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5606,7 +5606,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6336150308351019591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 659aeddd317af65489fd41502bfcaa0c, type: 3}
   m_Name: 
@@ -5825,6 +5825,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6336150308351019588}
     m_Modifications:
+    - target: {fileID: 4980355261658917259, guid: e8d61d9baf88cf749a15e6387e6748d3,
+        type: 3}
+      propertyPath: m_Name
+      value: Healthbar Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4980355261658917259, guid: e8d61d9baf88cf749a15e6387e6748d3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8418608623414202362, guid: e8d61d9baf88cf749a15e6387e6748d3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5929,16 +5939,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4980355261658917259, guid: e8d61d9baf88cf749a15e6387e6748d3,
-        type: 3}
-      propertyPath: m_Name
-      value: Healthbar Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 4980355261658917259, guid: e8d61d9baf88cf749a15e6387e6748d3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8d61d9baf88cf749a15e6387e6748d3, type: 3}

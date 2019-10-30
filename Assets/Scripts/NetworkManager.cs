@@ -28,12 +28,16 @@ public class NetworkManager : MonoBehaviour
     
     void Start()
     {
-        socket.On("enemies", OnEnemies);
-        socket.On("wakizashis", OnEnemies);
+        // socket.On("enemies", OnEnemies);
+        // socket.On("wakizashis", OnWakizashis);
         socket.On("other player connected", OnOtherPlayerConnected);
         socket.On("other player head", OnOtherPlayerHead);
         socket.On("other player right hand", OnOtherPlayerRightHand);
         socket.On("other player left hand", OnOtherPlayerLeftHand);
+
+        socket.On("others enemy", OnOthersEnemy);
+        socket.On("others wakizashi", OnOthersWakizashi);
+
         socket.On("play", OnPlay);
         socket.On("head move", OnHeadMove);
         socket.On("head turn", OnHeadTurn);
@@ -65,12 +69,28 @@ public class NetworkManager : MonoBehaviour
 
         string playerName = playerNameInput.text;
         List<SpawnPoint> playerSpawnPoints = GetComponent<PlayerSpawner>().playerSpawnPoints;
-        List<SpawnPoint> enemySpawnPoints = GetComponent<EnemySpawner>().enemySpawnPoints;
-        List<SpawnPoint> wakizashiSpawnPoints = GetComponent<WakizashiSpawner>().wakizashiSpawnPoints;
-        PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints, enemySpawnPoints, wakizashiSpawnPoints);
         GameObject startMenuCamera = GetComponent<GameObject>();
+        PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints);
+        
         string data = JsonUtility.ToJson(playerJSON);
         socket.Emit("play", new JSONObject(data));
+
+        EnemySpawner es = GetComponent<EnemySpawner>();
+        es.GenerateSpownPoints();
+        List<SpawnPoint> enemySpawnPoints = es.GetComponent<EnemySpawner>().enemySpawnPoints;
+        PlayersEnemyJSON playersEnemyJSON = new PlayersEnemyJSON(playerName, enemySpawnPoints);
+
+        WakizashiSpawner ws = GetComponent<WakizashiSpawner>();
+        ws.GenerateSpownPoints();
+        List<SpawnPoint> wakizashiSpawnPoints = ws.GetComponent<WakizashiSpawner>().wakizashiSpawnPoints;
+        PlayersWakizashiJSON playersWakizashiJSON = new PlayersWakizashiJSON(playerName, wakizashiSpawnPoints);
+
+        string enemyData = JsonUtility.ToJson(playersEnemyJSON);
+        string wakizashiData = JsonUtility.ToJson(playersWakizashiJSON);
+        socket.Emit("enemy", new JSONObject(enemyData));
+        socket.Emit("wakizashi", new JSONObject(wakizashiData));
+
+        
         canvas.gameObject.SetActive(false);
      }
 
@@ -122,25 +142,52 @@ public class NetworkManager : MonoBehaviour
         socket.Emit("left hand turn", new JSONObject(data));
     }
 
+    public void CommandEnemyMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new EnemyPositionJSON(vec3));
+        socket.Emit("enemy move", new JSONObject(data));
+    }
+
+    public void CommandEnemyTurn(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new EnemyRotationJSON(quat));
+        socket.Emit("enemy turn", new JSONObject(data));
+    }
+
+    public void CommandWakizashiMove(Vector3 vec3)
+    {
+        string data = JsonUtility.ToJson(new WakizashiPositionJSON(vec3));
+        socket.Emit("wakizashi move", new JSONObject(data));
+    }
+
+    public void CommandWakizashiTurn(Quaternion quat)
+    {
+        string data = JsonUtility.ToJson(new WakizashiRotationJSON(quat));
+        socket.Emit("wakizashi turn", new JSONObject(data));
+    }
+
     #endregion
 
     #region Listening
 
+    /*
     void OnEnemies(SocketIOEvent socketIOEvent)
     {
-        EnemiesJSON enemiesJSON = EnemiesJSON.CreateFromJSON(socketIOEvent.data.ToString());
+        EnemyJSON enemJSON = EnemyJSON.CreateFromJSON(socketIOEvent.data.ToString());
         EnemySpawner es = GetComponent<EnemySpawner>();
-        es.SpawnEnemies(enemiesJSON);
+        // es.SpawnEnemies(enemiesJSON);
         ChaseTarget ct = GetComponent<ChaseTarget>();
         ct.isLocalEnemy = true;
     }
-
+    */
+    /*
     void OnWakizashis(SocketIOEvent socketIOEvent)
     {
-        WakizashisJSON wakizashisJSON = WakizashisJSON.CreateFromJSON(socketIOEvent.data.ToString());
+        WakizashiJSON wakizashiJSON = WakizashiJSON.CreateFromJSON(socketIOEvent.data.ToString());
         WakizashiSpawner ws = GetComponent<WakizashiSpawner>();
-        ws.SpawnWakizashis(wakizashisJSON);
+        ws.SpawnWakizashis(wakizashiJSON);
     }
+    */
 
     void OnOtherPlayerConnected(SocketIOEvent socketIOEvent)
     {
@@ -233,16 +280,43 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+    void OnOthersEnemy(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        EnemyJSON enemyJSON = EnemyJSON.CreateFromJSON(data);
+        Vector3 position = new Vector3(enemyJSON.position[0], enemyJSON.position[1], enemyJSON.position[2]);
+        Quaternion rotation = Quaternion.Euler(enemyJSON.rotation[0], enemyJSON.rotation[1], enemyJSON.rotation[2]);
+        GameObject o = GameObject.Find(enemyJSON.name) as GameObject;
+        EnemySpawner es = GetComponent<EnemySpawner>();
+        es.SpawnEnemies(enemyJSON);
+        ChaseTarget ct = GetComponent<ChaseTarget>();
+        ct.isLocalEnemy = true;
+    }
 
+    void OnOthersWakizashi(SocketIOEvent socketIOEvent)
+    {
+        string data = socketIOEvent.data.ToString();
+        WakizashiJSON wakizashiJSON = WakizashiJSON.CreateFromJSON(data);
+        Vector3 position = new Vector3(wakizashiJSON.position[0], wakizashiJSON.position[1], wakizashiJSON.position[2]);
+        Quaternion rotation = Quaternion.Euler(wakizashiJSON.rotation[0], wakizashiJSON.rotation[1], wakizashiJSON.rotation[2]);
+        GameObject o = GameObject.Find(wakizashiJSON.name) as GameObject;
+        WakizashiSpawner es = GetComponent<WakizashiSpawner>();
+        es.SpawnWakizashis(wakizashiJSON);
+    }
 
     void OnPlay(SocketIOEvent socketIOEvent)
     {
         print("you joined");
         startMenuCamera.gameObject.SetActive(false);
         string data = socketIOEvent.data.ToString();
-        UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(currentUserJSON.position[0], currentUserJSON.position[1], currentUserJSON.position[2]);
-        Quaternion rotation = Quaternion.Euler(currentUserJSON.rotation[0], currentUserJSON.rotation[1], currentUserJSON.rotation[2]);
+        print("your JSON data was recieved");
+        PlayerJSON currentUserJSON = PlayerJSON.CreateFromJSON(data);
+        PointJSON pointJSON = currentUserJSON.playerSpawnPoints[0];        // UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
+        print("your JSON was created : " + data);
+        Vector3 position = new Vector3(pointJSON.position[0], pointJSON.position[1], pointJSON.position[2]);
+        print("your name isssssssssssssssss ");
+        Quaternion rotation = Quaternion.Euler(pointJSON.rotation[0], pointJSON.rotation[1], pointJSON.rotation[2]);
+        print("your name isssssssssssssssss ");
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t = p.transform.Find("Healthbar Canvas");
@@ -253,7 +327,7 @@ public class NetworkManager : MonoBehaviour
         p.name = currentUserJSON.name;
         GameObject Eye = p.transform.Find("OVRCameraRig").gameObject;
         Eye.gameObject.SetActive(true);
-        
+        print("your name is "+ currentUserJSON.name);
     }
 
     void OnHeadMove(SocketIOEvent socketIOEvent)
@@ -422,30 +496,23 @@ public class NetworkManager : MonoBehaviour
     {
         public string name;
         public List<PointJSON> playerSpawnPoints;
-        public List<PointJSON> enemySpawnPoints;
-        public List<PointJSON> wakizashiSpawnPoints;
 
-        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints, List<SpawnPoint> _enemySpawnPoints, List<SpawnPoint> _wakizashiSpawnPoints)
+        public static PlayerJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<PlayerJSON>(data);
+        }
+
+        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints)
         {
             playerSpawnPoints = new List<PointJSON>();
-            enemySpawnPoints = new List<PointJSON>();
-            wakizashiSpawnPoints = new List<PointJSON>();
             name = _name;
             foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoints)
             {
                 PointJSON pointJSON = new PointJSON(playerSpawnPoint);
                 playerSpawnPoints.Add(pointJSON);
             }
-            foreach (SpawnPoint enemySpawnPoint in _enemySpawnPoints)
-            {
-                PointJSON pointJSON = new PointJSON(enemySpawnPoint);
-                enemySpawnPoints.Add(pointJSON);
-            }
-            foreach (SpawnPoint wakizashiSpawnPoint in _wakizashiSpawnPoints)
-            {
-                PointJSON pointJSON = new PointJSON(wakizashiSpawnPoint);
-                wakizashiSpawnPoints.Add(pointJSON);
-            }
+
+
         }
     }
 
@@ -471,6 +538,89 @@ public class NetworkManager : MonoBehaviour
             };
         }
     }
+
+    [Serializable]
+    public class PlayersEnemyJSON
+    {
+        public string name;
+        public List<EnemyPointJSON> enemySpawnPoints;
+
+        public PlayersEnemyJSON(string _name, List<SpawnPoint> _enemySpawnPoints)
+        {
+            enemySpawnPoints = new List<EnemyPointJSON>();
+            name = _name;
+            foreach (SpawnPoint enemySpawnPoint in _enemySpawnPoints)
+            {
+                EnemyPointJSON pointJSON = new EnemyPointJSON(enemySpawnPoint);
+                enemySpawnPoints.Add(pointJSON);
+            }
+        }
+    }
+
+    [Serializable]
+    public class EnemyPointJSON
+    {
+        public float[] enemyPosition;
+        public float[] enemyRotation;
+        public EnemyPointJSON(SpawnPoint spawnPoint)
+        {
+            enemyPosition = new float[]
+            {
+                spawnPoint.transform.position.x,
+                spawnPoint.transform.position.y,
+                spawnPoint.transform.position.z
+            };
+
+            enemyRotation = new float[]
+            {
+                spawnPoint.transform.eulerAngles.x,
+                spawnPoint.transform.eulerAngles.y,
+                spawnPoint.transform.eulerAngles.z
+            };
+        }
+    }
+
+    [Serializable]
+    public class PlayersWakizashiJSON
+    {
+        public string name;
+        public List<WakizashiPointJSON> wakizashiSpawnPoints;
+
+        public PlayersWakizashiJSON(string _name, List<SpawnPoint> _wakizashiSpawnPoints)
+        {
+            wakizashiSpawnPoints = new List<WakizashiPointJSON>();
+            name = _name;
+            foreach (SpawnPoint wakizashiSpawnPoint in _wakizashiSpawnPoints)
+            {
+                WakizashiPointJSON pointJSON = new WakizashiPointJSON(wakizashiSpawnPoint);
+                wakizashiSpawnPoints.Add(pointJSON);
+            }
+        }
+    }
+
+    [Serializable]
+    public class WakizashiPointJSON
+    {
+        public float[] position;
+        public float[] rotation;
+        public WakizashiPointJSON(SpawnPoint spawnPoint)
+        {
+            position = new float[]
+            {
+                spawnPoint.transform.position.x,
+                spawnPoint.transform.position.y,
+                spawnPoint.transform.position.z
+            };
+
+            rotation = new float[]
+            {
+                spawnPoint.transform.eulerAngles.x,
+                spawnPoint.transform.eulerAngles.y,
+                spawnPoint.transform.eulerAngles.z
+            };
+        }
+    }
+
 
     [Serializable]
     public class HeadJSON
@@ -631,34 +781,78 @@ public class NetworkManager : MonoBehaviour
     }
 
     [Serializable]
-    public class EnemiesJSON
+    public class EnemyJSON
     {
         public string name;
         public float[] position;
         public float[] rotation;
         public int health;
 
-        public List<UserJSON> enemies;
+        public List<EnemyJSON> enemies;
 
-        public static EnemiesJSON CreateFromJSON(string data)
+        public static EnemyJSON CreateFromJSON(string data)
         {
-            return JsonUtility.FromJson<EnemiesJSON>(data);
+            return JsonUtility.FromJson<EnemyJSON>(data);
         }
     }
 
     [Serializable]
-    public class WakizashisJSON
+    public class EnemyPositionJSON
+    {
+        public float[] position;
+
+        public EnemyPositionJSON(Vector3 _position)
+        {
+            position = new float[] { _position.x, _position.y, _position.z };
+        }
+    }
+
+    [Serializable]
+    public class EnemyRotationJSON
+    {
+        public float[] rotation;
+
+        public EnemyRotationJSON(Quaternion _rotation)
+        {
+            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
+        }
+    }
+
+    [Serializable]
+    public class WakizashiJSON
     {
         public string name;
         public float[] position;
         public float[] rotation;
         public int health;
 
-        public List<UserJSON> wakizashis;
+        public List<WakizashiJSON> wakizashis;
 
-        public static WakizashisJSON CreateFromJSON(string data)
+        public static WakizashiJSON CreateFromJSON(string data)
         {
-            return JsonUtility.FromJson<WakizashisJSON>(data);
+            return JsonUtility.FromJson<WakizashiJSON>(data);
+        }
+    }
+
+    [Serializable]
+    public class WakizashiPositionJSON
+    {
+        public float[] position;
+
+        public WakizashiPositionJSON(Vector3 _position)
+        {
+            position = new float[] { _position.x, _position.y, _position.z };
+        }
+    }
+
+    [Serializable]
+    public class WakizashiRotationJSON
+    {
+        public float[] rotation;
+
+        public WakizashiRotationJSON(Quaternion _rotation)
+        {
+            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
         }
     }
 

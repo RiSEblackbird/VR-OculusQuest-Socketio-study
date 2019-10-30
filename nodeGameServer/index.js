@@ -4,8 +4,8 @@ var io = require('socket.io')(server);
 
 server.listen(3000);
 
-var enemies = [];
-var wakizashis = [];
+var enemySpawnPoints = [];
+var wakizashiSpawnPoints = [];
 var playerSpawnPoints = [];
 var clients = [];
 
@@ -17,18 +17,18 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket){
 
     var currentPlayer = {};
-    currentPlayer.name = 'unknown';
+    currentPlayer.name = 'unknown'+ (new Date()).toString();
 
     // プレイヤーの接続
     socket.on('player connect', function(){
-        console.log(currentPlayer.name+' recv: player connect');
+        console.log(currentPlayer.name+' recv: player connect, and clients.length is ' + clients.length);
         // すべてのクライアントについて名前と位置と回転を定義
         for(var i=0; i<clients.length; i++) {
+            console.log(currentPlayer.name+' FOR');
             var playerConnected = {
                 name:clients[i].name,
                 position:clients[i].position,
-                rotation:clients[i].rotation,
-                health:clients[i].health
+                rotation:clients[i].rotation
             };
 
             var connectedHead = {
@@ -49,22 +49,44 @@ io.on('connection', function(socket){
                 leftHandRotation:clients[i].leftHandRotation
             };
 
+
+            var othersEnemy = {
+                name: clients[i].name,
+                position:clients[i].position,
+                rotation:clients[i].rotation
+            };
+
+            var othersWakizashi = {
+                name: clients[i].name,
+                position:clients[i].position,
+                rotation:clients[i].rotation
+            };
+
+
             socket.emit('other player connected', playerConnected);
             socket.emit('other player head', connectedHead);
             socket.emit('other player right hand', connectedRightHand);
             socket.emit('other player left hand', connectedLeftHand);
+            socket.emit('others enemy', othersEnemy);
+            socket.emit('others wakizashi', othersWakizashi);
+
 
             // 接続された」プレイヤーの情報を表示
             console.log(currentPlayer.name+' emit: other player connected: '+JSON.stringify(playerConnected));
             console.log(currentPlayer.name+' emit: other player head: '+JSON.stringify(connectedHead));
             console.log(currentPlayer.name+' emit: other player right hand: '+JSON.stringify(connectedRightHand));
             console.log(currentPlayer.name+' emit: other player leftt hand: '+JSON.stringify(connectedLeftHand));
+            console.log(currentPlayer.name+' emit: others enemy: '+JSON.stringify(othersEnemy));
+            console.log(currentPlayer.name+' emit: other wakizashi : '+JSON.stringify(othersWakizashi));
         }
     });
 
     // ゲームプレイ中の通信
     socket.on('play', function(data){
         console.log(currentPlayer.name+' recv: play: '+JSON.stringify(data));
+        console.log("old player info : ", currentPlayer);
+        currentPlayer = data;
+        console.log("new player info : ", currentPlayer);
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
@@ -77,59 +99,7 @@ io.on('connection', function(socket){
                 };
                 playerSpawnPoints.push(playerSpawnPoint);
             });
-
-            numberOfEnemies = data.enemySpawnPoints.length;
-            enemies = [];
-            data.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
-                var enemy = {
-                    name: guid(),
-                    position: _enemySpawnPoint.position,
-                    rotation: _enemySpawnPoint.rotation,
-                    health: 100
-                };
-                enemies.push(enemy);
-            });
-
-            numberOfWakizashis = data.wakizashiSpawnPoints.length;
-            wakizashis = [];
-            data.wakizashiSpawnPoints.forEach(function(_wakizashiSpawnPoint) {
-                var wakizashi = {
-                    name: guid(),
-                    position: _wakizashiSpawnPoint.position,
-                    rotation: _wakizashiSpawnPoint.rotation,
-                    health: 100
-                };
-                wakizashis.push(wakizashi);
-            });
-
         }
-
-        var enemiesResponse = {
-            enemies: enemies
-        };
-
-        console.log(currentPlayer.name+' emit: enemies: '+JSON.stringify(enemiesResponse));
-        socket.emit('enemies', enemiesResponse);
-        var randamSpawnPoint = playerSpawnPoints[Math.floor(Math.random() * playerSpawnPoints.length)];
-        currentPlayer = {
-            name: data.name,
-            position: randamSpawnPoint.position,
-            rotation: randamSpawnPoint.rotation
-        };
-
-        var wakizashisResponse = {
-            wakizashis: wakizashis
-        };
-
-        console.log(currentPlayer.name+' emit: wakizashis: '+JSON.stringify(wakizashisResponse));
-        socket.emit('wakizashis', wakizashisResponse);
-        var randamSpawnPoint = playerSpawnPoints[Math.floor(Math.random() * playerSpawnPoints.length)];
-        currentPlayer = {
-            name: data.name,
-            position: randamSpawnPoint.position,
-            rotation: randamSpawnPoint.rotation
-        };
-
 
         // クライアントの列に現在接続したプレイヤーを加える
         clients.push(currentPlayer);
@@ -138,6 +108,36 @@ io.on('connection', function(socket){
         socket.emit('play', currentPlayer);
         // 既にいるプレイヤー達に自分が入ったことを伝える
         socket.broadcast.emit('other player connected', currentPlayer);
+    });
+
+    // 敵キャラの生成
+    socket.on('enemy', function(enemyData){
+        enemySpawnPoints = [];
+        enemyData.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
+            var enemySpawnPoint = {
+                name: guid(),
+                position: _enemySpawnPoint.position,
+                rotation: _enemySpawnPoint.rotation,
+                health: 100
+            };
+            enemySpawnPoints.push(enemySpawnPoint);
+        });
+        console.log(currentPlayer.name + ' enemy genarated');
+    });
+
+    // 脇差の生成
+    socket.on('wakizashi', function(wakizashiData){
+        wakizashiSpawnPoints = [];
+        wakizashiData.wakizashiSpawnPoints.forEach(function(_wakizashiSpawnPoint) {
+            var wakizashiSpawnPoint = {
+                name: guid(),
+                position: _wakizashiSpawnPoint.position,
+                rotation: _wakizashiSpawnPoint.rotation,
+                health: 100
+            };
+            wakizashiSpawnPoints.push(wakizashiSpawnPoint);
+        });
+        console.log(currentPlayer.name + ' wakizashi genarated');
     });
 
     // ヘッドの移動
@@ -195,6 +195,34 @@ io.on('connection', function(socket){
         console.log(currentPlayer.name+' recv: left hand turn: '+JSON.stringify(data));
         currentPlayer.leftHandRotation = data.leftHandRotation;
         socket.broadcast.emit('left hand turn', currentPlayer);
+    });
+
+    // 敵キャラの移動
+    socket.on('enemy move', function(data) {
+        console.log(currentPlayer.name+' recv: enemy move: '+JSON.stringify(data));
+        currentPlayer.position = data.position;
+        socket.broadcast.emit('enemy move', currentPlayer);
+    });
+
+    // 敵キャラの回転
+    socket.on('enemy turn', function(data) {
+        console.log(currentPlayer.name+' recv: enemy turn: '+JSON.stringify(data));
+        currentPlayer.rotation = data.rotation;
+        socket.broadcast.emit('enemy turn', currentPlayer);
+    });
+
+    // 脇差の移動
+    socket.on('wakizashi move', function(data) {
+        console.log(currentPlayer.name+' recv: wakizashi move: '+JSON.stringify(data));
+        currentPlayer.position = data.position;
+        socket.broadcast.emit('wakizashi move', currentPlayer);
+    });
+
+    // 脇差の回転
+    socket.on('wakizashi turn', function(data) {
+        console.log(currentPlayer.name+' recv: wakizashi turn: '+JSON.stringify(data));
+        currentPlayer.rotation = data.rotation;
+        socket.broadcast.emit('wakizashi turn', currentPlayer);
     });
 
 
