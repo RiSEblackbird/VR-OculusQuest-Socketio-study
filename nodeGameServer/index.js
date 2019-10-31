@@ -28,8 +28,8 @@ io.on('connection', function(socket){
             console.log('clients[', i,'] info : ', clients[i]);
             var playerConnected = {
                 name:clients[i].name,
-                position:clients[i].position,
-                rotation:clients[i].rotation
+                playerPosition:clients[i].playerPosition,
+                playerRotation:clients[i].playerRotation
             };
 
             var connectedHead = {
@@ -120,12 +120,12 @@ io.on('connection', function(socket){
             });
             */
 
-            var playerSpawnPosition = {
-                playerSpawnPosition: data.playerSpawnPosition
+            var playerPosition = {
+                playerPosition: data.playerPosition
             }
 
-            var playerSpawnRotation = {
-                playerSpawnRotation: data.playerSpawnRotation
+            var playerRotation = {
+                playerRotation: data.playerRotation
             }
 
         }

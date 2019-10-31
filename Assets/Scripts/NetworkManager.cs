@@ -198,14 +198,18 @@ public class NetworkManager : MonoBehaviour
         print("Someone else Joined ");
         string data = socketIOEvent.data.ToString();
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(userJSON.position[0], userJSON.position[1], userJSON.position[2]);
-        Quaternion rotation = Quaternion.Euler(userJSON.rotation[0], userJSON.rotation[1], userJSON.rotation[2]);
+        Debug.Log("userJSON is ganerated : " + data);
+        Vector3 position = new Vector3(userJSON.playerPosition[0], userJSON.playerPosition[1], userJSON.playerPosition[2]);
+        Quaternion rotation = Quaternion.Euler(userJSON.playerRotation[0], userJSON.playerRotation[1], userJSON.playerRotation[2]);
         GameObject o = GameObject.Find(userJSON.name) as GameObject;
+        Debug.Log("O is : " + o);
         if (o != null)
         {
             return;
         }
+        Debug.Log("Again O is : " + o);
         GameObject p = Instantiate(player, position, rotation) as GameObject;
+        Debug.Log(userJSON.name + " :  body is generated " );
         GameObject EyeCamera = p.transform.Find("Other Head Avator").gameObject;
         EyeCamera.gameObject.SetActive(true);
         GameObject OtherRightHand = p.transform.Find("Other R Hand").gameObject;
@@ -219,6 +223,7 @@ public class NetworkManager : MonoBehaviour
         playerName.text = userJSON.name;
         pc.isLocalPlayer = false;
         p.name = userJSON.name;
+        Debug.Log("Joining player name is : " + p.name);
         Health h = p.GetComponent<Health>();
         h.currentHealth = userJSON.health;
         h.OnChangeHealth();
@@ -320,9 +325,9 @@ public class NetworkManager : MonoBehaviour
         // UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
 
         print("your JSON was created : " + data);
-        Vector3 position = new Vector3(currentUserJSON.playerSpawnPosition[0], currentUserJSON.playerSpawnPosition[1], currentUserJSON.playerSpawnPosition[2]);
+        Vector3 position = new Vector3(currentUserJSON.playerPosition[0], currentUserJSON.playerPosition[1], currentUserJSON.playerPosition[2]);
         print("your name isssssssssssssssss ");
-        Quaternion rotation = Quaternion.Euler(currentUserJSON.playerSpawnRotation[0], currentUserJSON.playerSpawnRotation[1], currentUserJSON.playerSpawnRotation[2]);
+        Quaternion rotation = Quaternion.Euler(currentUserJSON.playerRotation[0], currentUserJSON.playerRotation[1], currentUserJSON.playerRotation[2]);
         print("your name isssssssssssssssss ");
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
@@ -376,7 +381,7 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(userJSON.position[0], userJSON.position[1], userJSON.position[2]);
+        Vector3 position = new Vector3(userJSON.playerPosition[0], userJSON.playerPosition[1], userJSON.playerPosition[2]);
         if (userJSON.name == playerNameInput.text)
         {
             return;
@@ -393,7 +398,7 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
-        Quaternion rotation = Quaternion.Euler(userJSON.rotation[0], userJSON.rotation[1], userJSON.rotation[2]);
+        Quaternion rotation = Quaternion.Euler(userJSON.playerRotation[0], userJSON.playerRotation[1], userJSON.playerRotation[2]);
         if (userJSON.name == playerNameInput.text)
         {
             return;
@@ -502,8 +507,8 @@ public class NetworkManager : MonoBehaviour
     public class PlayerJSON
     {
         public string name;
-        public float[] playerSpawnPosition;
-        public float[] playerSpawnRotation;
+        public float[] playerPosition;
+        public float[] playerRotation;
 
         public static PlayerJSON CreateFromJSON(string data)
         {
@@ -513,8 +518,8 @@ public class NetworkManager : MonoBehaviour
         public PlayerJSON(string _name, Vector3 _playerSpawnPosition, Quaternion _playerSpawnRotation)
         {
             name = _name;
-            playerSpawnPosition = new float[] { _playerSpawnPosition.x, _playerSpawnPosition.y, _playerSpawnPosition.z };
-            playerSpawnRotation = new float[] { _playerSpawnRotation.eulerAngles.x, _playerSpawnRotation.eulerAngles.y, _playerSpawnRotation.eulerAngles.z };
+            playerPosition = new float[] { _playerSpawnPosition.x, _playerSpawnPosition.y, _playerSpawnPosition.z };
+            playerRotation = new float[] { _playerSpawnRotation.eulerAngles.x, _playerSpawnRotation.eulerAngles.y, _playerSpawnRotation.eulerAngles.z };
         }
         /*
          * public class PositionJSON
@@ -782,8 +787,8 @@ public class NetworkManager : MonoBehaviour
     public class UserJSON
     {
         public string name;
-        public float[] position;
-        public float[] rotation;
+        public float[] playerPosition;
+        public float[] playerRotation;
         public int health;
 
         public static UserJSON CreateFromJSON(string data)
