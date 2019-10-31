@@ -31,8 +31,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 continue;
             }
-            Vector3 position = new Vector3(enemyJSON.position[0], enemyJSON.position[1], enemyJSON.position[2]);
-            Quaternion rotation = Quaternion.Euler(enemyJSON.rotation[0], enemyJSON.rotation[1], enemyJSON.rotation[2]);
+            Vector3 position = new Vector3(enemyJSON.enemyPosition[0], enemyJSON.enemyPosition[1], enemyJSON.enemyPosition[2]);
+            Quaternion rotation = Quaternion.Euler(enemyJSON.enemyRotation[0], enemyJSON.enemyRotation[1], enemyJSON.enemyRotation[2]);
             GameObject newEnemy = Instantiate(enemy, position, rotation) as GameObject;
             newEnemy.name = enemyJSON.name;
             MultiPlayerController pc = newEnemy.GetComponent<MultiPlayerController>();

@@ -69,7 +69,9 @@ public class NetworkManager : MonoBehaviour
 
         string playerName = playerNameInput.text;
         Debug.Log("Input name : " + playerName);
-        SpawnPoint playerSpawnPoint = GetComponent<PlayerSpawner>().playerSpawnPoint;
+        PlayerSpawner ps = GetComponent<PlayerSpawner>();
+        // ps.GenerateSpownPoint();
+        SpawnPoint playerSpawnPoint = ps.playerSpawnPoint;
         Vector3 playerSpawnPosition = playerSpawnPoint.spawnPosition;
         Quaternion playerSpawnRotation = playerSpawnPoint.spawnRotation;
         GameObject startMenuCamera = GetComponent<GameObject>();
@@ -293,8 +295,8 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         EnemyJSON enemyJSON = EnemyJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(enemyJSON.position[0], enemyJSON.position[1], enemyJSON.position[2]);
-        Quaternion rotation = Quaternion.Euler(enemyJSON.rotation[0], enemyJSON.rotation[1], enemyJSON.rotation[2]);
+        Vector3 position = new Vector3(enemyJSON.enemyPosition[0], enemyJSON.enemyPosition[1], enemyJSON.enemyPosition[2]);
+        Quaternion rotation = Quaternion.Euler(enemyJSON.enemyRotation[0], enemyJSON.enemyRotation[1], enemyJSON.enemyRotation[2]);
         GameObject o = GameObject.Find(enemyJSON.name) as GameObject;
         EnemySpawner es = GetComponent<EnemySpawner>();
         es.SpawnEnemies(enemyJSON);
@@ -306,8 +308,8 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         WakizashiJSON wakizashiJSON = WakizashiJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(wakizashiJSON.position[0], wakizashiJSON.position[1], wakizashiJSON.position[2]);
-        Quaternion rotation = Quaternion.Euler(wakizashiJSON.rotation[0], wakizashiJSON.rotation[1], wakizashiJSON.rotation[2]);
+        Vector3 position = new Vector3(wakizashiJSON.wakizashiPosition[0], wakizashiJSON.wakizashiPosition[1], wakizashiJSON.wakizashiPosition[2]);
+        Quaternion rotation = Quaternion.Euler(wakizashiJSON.wakizashiRotation[0], wakizashiJSON.wakizashiRotation[1], wakizashiJSON.wakizashiRotation[2]);
         GameObject o = GameObject.Find(wakizashiJSON.name) as GameObject;
         WakizashiSpawner es = GetComponent<WakizashiSpawner>();
         es.SpawnWakizashis(wakizashiJSON);
@@ -381,7 +383,7 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
-        Vector3 position = new Vector3(userJSON.playerPosition[0], userJSON.playerPosition[1], userJSON.playerPosition[2]);
+        Vector3 playerPosition = new Vector3(userJSON.playerPosition[0], userJSON.playerPosition[1], userJSON.playerPosition[2]);
         if (userJSON.name == playerNameInput.text)
         {
             return;
@@ -389,8 +391,9 @@ public class NetworkManager : MonoBehaviour
         GameObject p = GameObject.Find(userJSON.name) as GameObject;
         if (p != null)
         {
-            p.transform.position = position;
+            p.transform.position = playerPosition;
         }
+        Debug.Log(userJSON.name + " moved! ! !");
 
     }
 
@@ -398,7 +401,7 @@ public class NetworkManager : MonoBehaviour
     {
         string data = socketIOEvent.data.ToString();
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
-        Quaternion rotation = Quaternion.Euler(userJSON.playerRotation[0], userJSON.playerRotation[1], userJSON.playerRotation[2]);
+        Quaternion playerRotation = Quaternion.Euler(userJSON.playerRotation[0], userJSON.playerRotation[1], userJSON.playerRotation[2]);
         if (userJSON.name == playerNameInput.text)
         {
             return;
@@ -406,8 +409,9 @@ public class NetworkManager : MonoBehaviour
         GameObject p = GameObject.Find(userJSON.name) as GameObject;
         if (p != null)
         {
-            p.transform.rotation = rotation;
+            p.transform.rotation = playerRotation;
         }
+        Debug.Log(userJSON.name + " turned! ! !");
     }
 
     void OnRightHandMove(SocketIOEvent socketIOEvent)
@@ -694,22 +698,22 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class PositionJSON
     {
-        public float[] position;
+        public float[] playerPosition;
 
         public PositionJSON(Vector3 _position)
         {
-            position = new float[] { _position.x, _position.y, _position.z };
+            playerPosition = new float[] { _position.x, _position.y, _position.z };
         }
     }
 
     [Serializable]
     public class RotationJSON
     {
-        public float[] rotation;
+        public float[] playerRotation;
 
         public RotationJSON(Quaternion _rotation)
         {
-            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
+            playerRotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
         }
     }
 
@@ -818,8 +822,8 @@ public class NetworkManager : MonoBehaviour
     public class EnemyJSON
     {
         public string name;
-        public float[] position;
-        public float[] rotation;
+        public float[] enemyPosition;
+        public float[] enemyRotation;
         public int health;
 
         public List<EnemyJSON> enemies;
@@ -833,22 +837,22 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class EnemyPositionJSON
     {
-        public float[] position;
+        public float[] enemyPosition;
 
         public EnemyPositionJSON(Vector3 _position)
         {
-            position = new float[] { _position.x, _position.y, _position.z };
+            enemyPosition = new float[] { _position.x, _position.y, _position.z };
         }
     }
 
     [Serializable]
     public class EnemyRotationJSON
     {
-        public float[] rotation;
+        public float[] enemyRotation;
 
         public EnemyRotationJSON(Quaternion _rotation)
         {
-            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
+            enemyRotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
         }
     }
 
@@ -856,8 +860,8 @@ public class NetworkManager : MonoBehaviour
     public class WakizashiJSON
     {
         public string name;
-        public float[] position;
-        public float[] rotation;
+        public float[] wakizashiPosition;
+        public float[] wakizashiRotation;
         public int health;
 
         public List<WakizashiJSON> wakizashis;
@@ -871,22 +875,22 @@ public class NetworkManager : MonoBehaviour
     [Serializable]
     public class WakizashiPositionJSON
     {
-        public float[] position;
+        public float[] wakizashiPosition;
 
         public WakizashiPositionJSON(Vector3 _position)
         {
-            position = new float[] { _position.x, _position.y, _position.z };
+            wakizashiPosition = new float[] { _position.x, _position.y, _position.z };
         }
     }
 
     [Serializable]
     public class WakizashiRotationJSON
     {
-        public float[] rotation;
+        public float[] wakizashiRotation;
 
         public WakizashiRotationJSON(Quaternion _rotation)
         {
-            rotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
+            wakizashiRotation = new float[] { _rotation.eulerAngles.x, _rotation.eulerAngles.y, _rotation.eulerAngles.z };
         }
     }
 

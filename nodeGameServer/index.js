@@ -52,14 +52,14 @@ io.on('connection', function(socket){
 
             var othersEnemy = {
                 name: clients[i].name,
-                position:clients[i].position,
-                rotation:clients[i].rotation
+                enemyPosition:clients[i].enemyPosition,
+                enemyRotation:clients[i].enemyRotation
             };
 
             var othersWakizashi = {
                 name: clients[i].name,
-                position:clients[i].position,
-                rotation:clients[i].rotation
+                wakizashiPosition:clients[i].wakizashiPosition,
+                wakizashiRotation:clients[i].wakizashiRotation
             };
 
 
@@ -145,8 +145,8 @@ io.on('connection', function(socket){
         enemyData.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
             var enemySpawnPoint = {
                 name: guid(),
-                position: _enemySpawnPoint.position,
-                rotation: _enemySpawnPoint.rotation,
+                enemyPosition: _enemySpawnPoint.enemyPosition,
+                enemyRotation: _enemySpawnPoint.enemyRotation,
                 health: 100
             };
             enemySpawnPoints.push(enemySpawnPoint);
@@ -160,8 +160,8 @@ io.on('connection', function(socket){
         wakizashiData.wakizashiSpawnPoints.forEach(function(_wakizashiSpawnPoint) {
             var wakizashiSpawnPoint = {
                 name: guid(),
-                position: _wakizashiSpawnPoint.position,
-                rotation: _wakizashiSpawnPoint.rotation,
+                wakizashiPosition: _wakizashiSpawnPoint.wakizashiPosition,
+                wakizashiRotation: _wakizashiSpawnPoint.wakizashiRotation,
                 health: 100
             };
             wakizashiSpawnPoints.push(wakizashiSpawnPoint);
@@ -187,14 +187,14 @@ io.on('connection', function(socket){
     // プレイヤーの移動
     socket.on('player move', function(data) {
         console.log(currentPlayer.name+' recv: move: '+JSON.stringify(data));
-        currentPlayer.position = data.position;
+        currentPlayer.playerPosition = data.playerPosition;
         socket.broadcast.emit('player move', currentPlayer);
     });
 
     // プレイヤーの回転
     socket.on('player turn', function(data) {
         console.log(currentPlayer.name+' recv: turn: '+JSON.stringify(data));
-        currentPlayer.rotation = data.rotation;
+        currentPlayer.playerRotation = data.playerRotation;
         socket.broadcast.emit('player turn', currentPlayer);
     });
 
@@ -229,28 +229,28 @@ io.on('connection', function(socket){
     // 敵キャラの移動
     socket.on('enemy move', function(data) {
         console.log(currentPlayer.name+' recv: enemy move: '+JSON.stringify(data));
-        currentPlayer.position = data.position;
+        currentPlayer.enemyPosition = data.enemyPosition;
         socket.broadcast.emit('enemy move', currentPlayer);
     });
 
     // 敵キャラの回転
     socket.on('enemy turn', function(data) {
         console.log(currentPlayer.name+' recv: enemy turn: '+JSON.stringify(data));
-        currentPlayer.rotation = data.rotation;
+        currentPlayer.enemyRotation = data.enemyRotation;
         socket.broadcast.emit('enemy turn', currentPlayer);
     });
 
     // 脇差の移動
     socket.on('wakizashi move', function(data) {
         console.log(currentPlayer.name+' recv: wakizashi move: '+JSON.stringify(data));
-        currentPlayer.position = data.position;
+        currentPlayer.wakizashiPosition = data.wakizashiPosition;
         socket.broadcast.emit('wakizashi move', currentPlayer);
     });
 
     // 脇差の回転
     socket.on('wakizashi turn', function(data) {
         console.log(currentPlayer.name+' recv: wakizashi turn: '+JSON.stringify(data));
-        currentPlayer.rotation = data.rotation;
+        currentPlayer.wakizashiRotation = data.wakizashiRotation;
         socket.broadcast.emit('wakizashi turn', currentPlayer);
     });
 

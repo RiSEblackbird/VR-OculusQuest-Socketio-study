@@ -20389,7 +20389,7 @@ PrefabInstance:
     - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: numberOfPoint
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
@@ -20456,7 +20456,7 @@ PrefabInstance:
     - target: {fileID: 1279127410447118875, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: numberOfwakizashi
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1279127410447118875, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}

@@ -14,7 +14,7 @@ public class WakizashiSpawner : MonoBehaviour
     {
         for (int i = 0; i < numberOfwakizashi; i++)
         {
-            var spawnPosition = new Vector3(Random.Range(-3f, 3f), 3f, Random.Range(-3f, 3f));
+            var spawnPosition = new Vector3(Random.Range(-5f, 5f), Random.Range(1f, 10f), Random.Range(5f, 20f));
             var spawnRotation = Quaternion.Euler(0f, Random.Range(0, 180), 0f);
             SpawnPoint wakizashiSpawnPoint = (Instantiate(wakizashi, spawnPosition, spawnRotation) as GameObject).GetComponent<SpawnPoint>();
             wakizashiSpawnPoints.Add(wakizashiSpawnPoint);
@@ -30,8 +30,8 @@ public class WakizashiSpawner : MonoBehaviour
             {
                 continue;
             }
-            Vector3 position = new Vector3(wakizashiJSON.position[0], wakizashiJSON.position[1], wakizashiJSON.position[2]);
-            Quaternion rotation = Quaternion.Euler(wakizashiJSON.rotation[0], wakizashiJSON.rotation[1], wakizashiJSON.rotation[2]);
+            Vector3 position = new Vector3(wakizashiJSON.wakizashiPosition[0], wakizashiJSON.wakizashiPosition[1], wakizashiJSON.wakizashiPosition[2]);
+            Quaternion rotation = Quaternion.Euler(wakizashiJSON.wakizashiRotation[0], wakizashiJSON.wakizashiRotation[1], wakizashiJSON.wakizashiRotation[2]);
             GameObject newWakizashi = Instantiate(wakizashi, position, rotation) as GameObject;
             newWakizashi.name = wakizashiJSON.name;
             MultiPlayerController pc = newWakizashi.GetComponent<MultiPlayerController>();
