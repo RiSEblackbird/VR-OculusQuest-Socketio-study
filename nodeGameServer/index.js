@@ -17,14 +17,15 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket){
 
     var currentPlayer = {};
-    currentPlayer.name = 'unknown'+ (new Date()).toString();
+    currentPlayer.name = 'unknown'; //+ (new Date()).toString();
 
     // プレイヤーの接続
     socket.on('player connect', function(){
         console.log(currentPlayer.name+' recv: player connect, and clients.length is ' + clients.length);
+        console.log("Now cliants info : ", clients);
         // すべてのクライアントについて名前と位置と回転を定義
         for(var i=0; i<clients.length; i++) {
-            console.log(currentPlayer.name+' FOR');
+            console.log('clients[', i,'] info : ', clients[i]);
             var playerConnected = {
                 name:clients[i].name,
                 position:clients[i].position,
@@ -48,7 +49,6 @@ io.on('connection', function(socket){
                 leftHandPosition:clients[i].leftHandPosition,
                 leftHandRotation:clients[i].leftHandRotation
             };
-
 
             var othersEnemy = {
                 name: clients[i].name,
@@ -85,20 +85,49 @@ io.on('connection', function(socket){
     socket.on('play', function(data){
         console.log(currentPlayer.name+' recv: play: '+JSON.stringify(data));
         console.log("old player info : ", currentPlayer);
+        console.log("data is : ", data);
         currentPlayer = data;
         console.log("new player info : ", currentPlayer);
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
-
+            /*
             playerSpawnPoints = [];
-            data.playerSpawnPoints.forEach(function(_playerSpawnPoint) {
+            data.playerSpawnPoints.forEach(function(data) {
                 var playerSpawnPoint = {
-                    position: _playerSpawnPoint.position,
-                    rotation: _playerSpawnPoint.rotation
+                    playerSpawnPosition: data.playerSpawnPosition,
+                    playerSpawnRotation: data.playerSpawnRotation
                 };
                 playerSpawnPoints.push(playerSpawnPoint);
             });
+            */
+
+            /*
+            playerSpawnPositions = [];
+            data.playerSpawnPositions.forEach(function(data) {
+                var playerSpawnPosition = {
+                    playerSpawnPosition: data.playerSpawnPosition
+                }
+                playerSpawnPositions.push(playerSpawnPosition);
+            });
+
+            playerSpawnRotations = [];
+            data.playerSpawnRotations.forEach(function(data) {
+                var playerSpawnRotation = {
+                    playerSpawnRotation: data.playerSpawnRotation
+                }
+                playerSpawnRotations.push(playerSpawnRotation);
+            });
+            */
+
+            var playerSpawnPosition = {
+                playerSpawnPosition: data.playerSpawnPosition
+            }
+
+            var playerSpawnRotation = {
+                playerSpawnRotation: data.playerSpawnRotation
+            }
+
         }
 
         // クライアントの列に現在接続したプレイヤーを加える

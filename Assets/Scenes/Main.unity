@@ -20380,6 +20380,22 @@ PrefabInstance:
       propertyPath: playerSpawnPoints.Array.data[5]
       value: 
       objectReference: {fileID: 265070632}
+    - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 939603406337776409, guid: 36912e6d45a4e86419e65e8b8979c304,
+        type: 3}
+    - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: numberOfPoint
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2934967753152730807, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: playerSpawnPoint
+      value: 
+      objectReference: {fileID: 1401889295810134259}
     - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: canvas

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Vector3 spawnPosition;
+    public Quaternion spawnRotation;
+    
     void Start()
     {
-        
+        spawnPosition = transform.position;
+        spawnRotation = transform.rotation;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

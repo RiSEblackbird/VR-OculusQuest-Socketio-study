@@ -25,7 +25,7 @@ public class NetworkManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
     }
-    
+
     void Start()
     {
         // socket.On("enemies", OnEnemies);
@@ -68,13 +68,18 @@ public class NetworkManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         string playerName = playerNameInput.text;
-        List<SpawnPoint> playerSpawnPoints = GetComponent<PlayerSpawner>().playerSpawnPoints;
+        Debug.Log("Input name : " + playerName);
+        SpawnPoint playerSpawnPoint = GetComponent<PlayerSpawner>().playerSpawnPoint;
+        Vector3 playerSpawnPosition = playerSpawnPoint.spawnPosition;
+        Quaternion playerSpawnRotation = playerSpawnPoint.spawnRotation;
         GameObject startMenuCamera = GetComponent<GameObject>();
-        PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPoints);
-        
-        string data = JsonUtility.ToJson(playerJSON);
-        socket.Emit("play", new JSONObject(data));
 
+        PlayerJSON playerJSON = new PlayerJSON(playerName, playerSpawnPosition, playerSpawnRotation);
+        string data = JsonUtility.ToJson(playerJSON);
+
+        Debug.Log("playerJSON : " + data);
+        socket.Emit("play", new JSONObject(data));
+        Debug.Log("Emit : play");
         EnemySpawner es = GetComponent<EnemySpawner>();
         es.GenerateSpownPoints();
         List<SpawnPoint> enemySpawnPoints = es.GetComponent<EnemySpawner>().enemySpawnPoints;
@@ -90,9 +95,8 @@ public class NetworkManager : MonoBehaviour
         socket.Emit("enemy", new JSONObject(enemyData));
         socket.Emit("wakizashi", new JSONObject(wakizashiData));
 
-        
         canvas.gameObject.SetActive(false);
-     }
+    }
 
     public void CommandMove(Vector3 vec3)
     {
@@ -210,7 +214,7 @@ public class NetworkManager : MonoBehaviour
         OtherLeftHand.gameObject.SetActive(true);
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t = p.transform.Find("Healthbar Canvas");
-        Transform t1 = t.transform.Find("Player Name"); 
+        Transform t1 = t.transform.Find("Player Name");
         Text playerName = t1.GetComponent<Text>();
         playerName.text = userJSON.name;
         pc.isLocalPlayer = false;
@@ -311,23 +315,26 @@ public class NetworkManager : MonoBehaviour
         string data = socketIOEvent.data.ToString();
         print("your JSON data was recieved");
         PlayerJSON currentUserJSON = PlayerJSON.CreateFromJSON(data);
-        PointJSON pointJSON = currentUserJSON.playerSpawnPoints[0];        // UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
+
+        // PointJSON pointJSON = currentUserJSON.playerSpawnPoint[0];
+        // UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
+
         print("your JSON was created : " + data);
-        Vector3 position = new Vector3(pointJSON.position[0], pointJSON.position[1], pointJSON.position[2]);
+        Vector3 position = new Vector3(currentUserJSON.playerSpawnPosition[0], currentUserJSON.playerSpawnPosition[1], currentUserJSON.playerSpawnPosition[2]);
         print("your name isssssssssssssssss ");
-        Quaternion rotation = Quaternion.Euler(pointJSON.rotation[0], pointJSON.rotation[1], pointJSON.rotation[2]);
+        Quaternion rotation = Quaternion.Euler(currentUserJSON.playerSpawnRotation[0], currentUserJSON.playerSpawnRotation[1], currentUserJSON.playerSpawnRotation[2]);
         print("your name isssssssssssssssss ");
         GameObject p = Instantiate(player, position, rotation) as GameObject;
         MultiPlayerController pc = p.GetComponent<MultiPlayerController>();
         Transform t = p.transform.Find("Healthbar Canvas");
-        Transform t1 = t.transform.Find("Player Name"); 
+        Transform t1 = t.transform.Find("Player Name");
         Text playerName = t1.GetComponent<Text>();
         playerName.text = currentUserJSON.name;
         pc.isLocalPlayer = true;
         p.name = currentUserJSON.name;
         GameObject Eye = p.transform.Find("OVRCameraRig").gameObject;
         Eye.gameObject.SetActive(true);
-        print("your name is "+ currentUserJSON.name);
+        print("your name is " + currentUserJSON.name);
     }
 
     void OnHeadMove(SocketIOEvent socketIOEvent)
@@ -379,7 +386,7 @@ public class NetworkManager : MonoBehaviour
         {
             p.transform.position = position;
         }
-            
+
     }
 
     void OnPlayerTurn(SocketIOEvent socketIOEvent)
@@ -486,7 +493,7 @@ public class NetworkManager : MonoBehaviour
         UserJSON userJSON = UserJSON.CreateFromJSON(data);
         Destroy(GameObject.Find(userJSON.name));
     }
-    
+
     #endregion
 
     #region JSONMessageClasses
@@ -495,25 +502,47 @@ public class NetworkManager : MonoBehaviour
     public class PlayerJSON
     {
         public string name;
-        public List<PointJSON> playerSpawnPoints;
+        public float[] playerSpawnPosition;
+        public float[] playerSpawnRotation;
 
         public static PlayerJSON CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<PlayerJSON>(data);
         }
 
-        public PlayerJSON(string _name, List<SpawnPoint> _playerSpawnPoints)
+        public PlayerJSON(string _name, Vector3 _playerSpawnPosition, Quaternion _playerSpawnRotation)
         {
-            playerSpawnPoints = new List<PointJSON>();
             name = _name;
-            foreach (SpawnPoint playerSpawnPoint in _playerSpawnPoints)
-            {
-                PointJSON pointJSON = new PointJSON(playerSpawnPoint);
-                playerSpawnPoints.Add(pointJSON);
-            }
-
-
+            playerSpawnPosition = new float[] { _playerSpawnPosition.x, _playerSpawnPosition.y, _playerSpawnPosition.z };
+            playerSpawnRotation = new float[] { _playerSpawnRotation.eulerAngles.x, _playerSpawnRotation.eulerAngles.y, _playerSpawnRotation.eulerAngles.z };
         }
+        /*
+         * public class PositionJSON
+    {
+        public float[] position;
+
+        public PositionJSON(Vector3 _position)
+        {
+            position = new float[] { _position.x, _position.y, _position.z };
+        }
+    }
+         * 
+         *  public class RightHandPositionJSON
+    {
+        public float[] rightHandPosition;
+
+        public RightHandPositionJSON(Vector3 _rightHandPosition)
+        {
+            rightHandPosition = new float[] { _rightHandPosition.x, _rightHandPosition.y, _rightHandPosition.z };
+        }
+    }
+
+        public PlayerJSON(string _name, float[] _playerSpawnPosition, float[] playerSpawnRotation)
+        {
+            playerSpawnPosition = new PointJSON(_playerSpawnPosition);
+            name = _name;
+        }
+        */
     }
 
     [Serializable]
@@ -665,7 +694,7 @@ public class NetworkManager : MonoBehaviour
         public PositionJSON(Vector3 _position)
         {
             position = new float[] { _position.x, _position.y, _position.z };
-         }
+        }
     }
 
     [Serializable]
