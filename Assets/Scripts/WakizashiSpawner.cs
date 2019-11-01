@@ -18,7 +18,6 @@ public class WakizashiSpawner : MonoBehaviour
             var spawnRotation = Quaternion.Euler(0f, Random.Range(0, 180), 0f);
             SpawnPoint wakizashiSpawnPoint = (Instantiate(wakizashi, spawnPosition, spawnRotation) as GameObject).GetComponent<SpawnPoint>();
             wakizashiSpawnPoints.Add(wakizashiSpawnPoint);
-            
         }
     }
 

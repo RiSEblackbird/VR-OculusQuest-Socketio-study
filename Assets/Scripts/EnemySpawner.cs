@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemy;
+    public GameObject Dammypoint;
     public GameObject spawnPoint;
     public int numberOfEnemyi;
     public int health;
@@ -17,9 +17,8 @@ public class EnemySpawner : MonoBehaviour
         {
             var spawnPosition = new Vector3(Random.Range(-10f, 10f), Random.Range(2f, 5f), Random.Range(5f, 15f));
             var spawnRotation = Quaternion.Euler(0f, Random.Range(0, 180), 0f);
-            SpawnPoint EnemySpawnPoint = (Instantiate(enemy, spawnPosition, spawnRotation) as GameObject).GetComponent<SpawnPoint>();
+            SpawnPoint EnemySpawnPoint = (Instantiate(Dammypoint, spawnPosition, spawnRotation) as GameObject).GetComponent<SpawnPoint>();
             enemySpawnPoints.Add(EnemySpawnPoint);
-
         }
     }
 

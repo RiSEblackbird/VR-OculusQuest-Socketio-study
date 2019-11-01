@@ -46,7 +46,7 @@ public class EnemyCubeController : MonoBehaviour
             oldRotation = currentRotation;
         }
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.position - transform.position), 0.2f);
+        // transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.position - transform.position), 0.2f);
 
         transform.position += transform.forward * speed;
     }

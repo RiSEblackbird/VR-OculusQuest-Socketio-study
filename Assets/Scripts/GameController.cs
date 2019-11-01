@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour
     public GameObject Reticle;
     public GameObject winnerLabelObject;
     public GameObject RetryButton;
-    
 
     public void Update ()
     {
@@ -26,7 +25,7 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene(sceneIndex);
         }
 
-        /*
+        /* ゲームリセットボタン、最初のキー入力で誤爆する恐れがあるのでＯＦＦ
         if (OVRInput.Get(OVRInput.Button.Three) || Input.GetKey(KeyCode.K))
         {
             EnemySpawner es = GetComponent<EnemySpawner>();
@@ -42,7 +41,6 @@ public class GameController : MonoBehaviour
         */
 
     }
-
     
     public void OnRetry ()
     {
