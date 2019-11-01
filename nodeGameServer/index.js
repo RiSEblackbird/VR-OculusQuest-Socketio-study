@@ -92,6 +92,7 @@ io.on('connection', function(socket){
         console.log("old player info : ", currentPlayer);
         console.log("data is : ", data);
         currentPlayer = data;
+        currentPlayer.name = "desktop" + clients.length;
         console.log("new player info : ", currentPlayer);
 
         // 既存のクライアントがいない場合
