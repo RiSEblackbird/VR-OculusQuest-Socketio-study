@@ -20427,10 +20427,16 @@ PrefabInstance:
       propertyPath: MyMainCamera
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2934967753152730804, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
+        type: 3}
+      propertyPath: enemyCube
+      value: 
+      objectReference: {fileID: 8839073235819749508, guid: c921de25db817f6499ffb6ab171ae56d,
+        type: 3}
     - target: {fileID: 6882325979585354419, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}
       propertyPath: numberOfEnemyi
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6882325979585354419, guid: 721a4ca0bcf15bb47a4a4115c13b8bbe,
         type: 3}

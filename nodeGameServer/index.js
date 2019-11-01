@@ -91,35 +91,6 @@ io.on('connection', function(socket){
 
         // 既存のクライアントがいない場合
         if(clients.length === 0) {
-            /*
-            playerSpawnPoints = [];
-            data.playerSpawnPoints.forEach(function(data) {
-                var playerSpawnPoint = {
-                    playerSpawnPosition: data.playerSpawnPosition,
-                    playerSpawnRotation: data.playerSpawnRotation
-                };
-                playerSpawnPoints.push(playerSpawnPoint);
-            });
-            */
-
-            /*
-            playerSpawnPositions = [];
-            data.playerSpawnPositions.forEach(function(data) {
-                var playerSpawnPosition = {
-                    playerSpawnPosition: data.playerSpawnPosition
-                }
-                playerSpawnPositions.push(playerSpawnPosition);
-            });
-
-            playerSpawnRotations = [];
-            data.playerSpawnRotations.forEach(function(data) {
-                var playerSpawnRotation = {
-                    playerSpawnRotation: data.playerSpawnRotation
-                }
-                playerSpawnRotations.push(playerSpawnRotation);
-            });
-            */
-
             var playerPosition = {
                 playerPosition: data.playerPosition
             }
@@ -127,7 +98,6 @@ io.on('connection', function(socket){
             var playerRotation = {
                 playerRotation: data.playerRotation
             }
-
         }
 
         // クライアントの列に現在接続したプレイヤーを加える
@@ -144,14 +114,15 @@ io.on('connection', function(socket){
         enemySpawnPoints = [];
         enemyData.enemySpawnPoints.forEach(function(_enemySpawnPoint) {
             var enemySpawnPoint = {
-                name: guid(),
+                name: ('ememy : ' + guid()),
                 enemyPosition: _enemySpawnPoint.enemyPosition,
                 enemyRotation: _enemySpawnPoint.enemyRotation,
                 health: 100
             };
             enemySpawnPoints.push(enemySpawnPoint);
+            socket.emit('enemy', enemySpawnPoint);
+            console.log('enemySpawnPoint : ', enemySpawnPoint);
         });
-        console.log(currentPlayer.name + ' enemy genarated');
     });
 
     // 脇差の生成

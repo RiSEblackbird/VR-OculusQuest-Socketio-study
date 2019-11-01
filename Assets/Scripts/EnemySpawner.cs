@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < numberOfEnemyi; i++)
         {
-            var spawnPosition = new Vector3(Random.Range(-30f, 30f), Random.Range(10f, 30f), Random.Range(-30f, 30f));
+            var spawnPosition = new Vector3(Random.Range(-10f, 10f), Random.Range(2f, 5f), Random.Range(5f, 15f));
             var spawnRotation = Quaternion.Euler(0f, Random.Range(0, 180), 0f);
             SpawnPoint EnemySpawnPoint = (Instantiate(enemy, spawnPosition, spawnRotation) as GameObject).GetComponent<SpawnPoint>();
             enemySpawnPoints.Add(EnemySpawnPoint);
@@ -23,6 +23,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /*
     public void SpawnEnemies(NetworkManager.EnemyJSON enemiesJSON)
     {
         foreach (NetworkManager.EnemyJSON enemyJSON in enemiesJSON.enemies)
@@ -44,4 +45,5 @@ public class EnemySpawner : MonoBehaviour
             h.isEnemy = true;
         }
     }
+    */
 }

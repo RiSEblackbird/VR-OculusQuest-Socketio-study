@@ -12,6 +12,7 @@ public class NetworkManager : MonoBehaviour
     public SocketIOComponent socket;
     public InputField playerNameInput;
     public GameObject player;
+    public GameObject enemyCube;
     public GameObject startMenuCamera;
 
     void Awake()
@@ -28,7 +29,7 @@ public class NetworkManager : MonoBehaviour
 
     void Start()
     {
-        // socket.On("enemies", OnEnemies);
+        socket.On("enemy", OnEnemy);
         // socket.On("wakizashis", OnWakizashis);
         socket.On("other player connected", OnOtherPlayerConnected);
         socket.On("other player head", OnOtherPlayerHead);
@@ -84,6 +85,9 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("Emit : play");
         EnemySpawner es = GetComponent<EnemySpawner>();
         es.GenerateSpownPoints();
+
+        /////////////////
+        ///
         List<SpawnPoint> enemySpawnPoints = es.GetComponent<EnemySpawner>().enemySpawnPoints;
         PlayersEnemyJSON playersEnemyJSON = new PlayersEnemyJSON(playerName, enemySpawnPoints);
 
@@ -175,25 +179,6 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     #region Listening
-
-    /*
-    void OnEnemies(SocketIOEvent socketIOEvent)
-    {
-        EnemyJSON enemJSON = EnemyJSON.CreateFromJSON(socketIOEvent.data.ToString());
-        EnemySpawner es = GetComponent<EnemySpawner>();
-        // es.SpawnEnemies(enemiesJSON);
-        ChaseTarget ct = GetComponent<ChaseTarget>();
-        ct.isLocalEnemy = true;
-    }
-    */
-    /*
-    void OnWakizashis(SocketIOEvent socketIOEvent)
-    {
-        WakizashiJSON wakizashiJSON = WakizashiJSON.CreateFromJSON(socketIOEvent.data.ToString());
-        WakizashiSpawner ws = GetComponent<WakizashiSpawner>();
-        ws.SpawnWakizashis(wakizashiJSON);
-    }
-    */
 
     void OnOtherPlayerConnected(SocketIOEvent socketIOEvent)
     {
@@ -299,7 +284,7 @@ public class NetworkManager : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(enemyJSON.enemyRotation[0], enemyJSON.enemyRotation[1], enemyJSON.enemyRotation[2]);
         GameObject o = GameObject.Find(enemyJSON.name) as GameObject;
         EnemySpawner es = GetComponent<EnemySpawner>();
-        es.SpawnEnemies(enemyJSON);
+        // es.SpawnEnemies(enemyJSON);
         ChaseTarget ct = GetComponent<ChaseTarget>();
         ct.isLocalEnemy = true;
     }
@@ -323,9 +308,6 @@ public class NetworkManager : MonoBehaviour
         print("your JSON data was recieved");
         PlayerJSON currentUserJSON = PlayerJSON.CreateFromJSON(data);
 
-        // PointJSON pointJSON = currentUserJSON.playerSpawnPoint[0];
-        // UserJSON currentUserJSON = UserJSON.CreateFromJSON(data);
-
         print("your JSON was created : " + data);
         Vector3 position = new Vector3(currentUserJSON.playerPosition[0], currentUserJSON.playerPosition[1], currentUserJSON.playerPosition[2]);
         print("your name isssssssssssssssss ");
@@ -342,6 +324,29 @@ public class NetworkManager : MonoBehaviour
         GameObject Eye = p.transform.Find("OVRCameraRig").gameObject;
         Eye.gameObject.SetActive(true);
         print("your name is " + currentUserJSON.name);
+    }
+
+    void OnEnemy(SocketIOEvent socketIOEvent)
+    {
+        print("An enemy");
+        string data = socketIOEvent.data.ToString();
+        print("your Enemy JSON data was recieved");
+        EnemyJSON currentEnemyJSON = EnemyJSON.CreateFromJSON(data);
+
+        print("your JSON was created : " + data);
+        Vector3 position = new Vector3(currentEnemyJSON.enemyPosition[0], currentEnemyJSON.enemyPosition[1], currentEnemyJSON.enemyPosition[2]);
+        print("your name isssssssssssssssss ");
+        Quaternion rotation = Quaternion.Euler(currentEnemyJSON.enemyRotation[0], currentEnemyJSON.enemyRotation[1], currentEnemyJSON.enemyRotation[2]);
+        print("your name isssssssssssssssss ");
+        GameObject p = Instantiate(enemyCube, position, rotation) as GameObject;
+        EnemyCubeController pc = p.GetComponent<EnemyCubeController>();
+        Transform t = p.transform.Find("Healthbar Canvas");
+        Transform t1 = t.transform.Find("Player Name");
+        Text playerName = t1.GetComponent<Text>();
+        playerName.text = currentEnemyJSON.name;
+        pc.isLocalEnemy = true;
+        p.name = currentEnemyJSON.name;
+        print("your enemy name is " + currentEnemyJSON.name);
     }
 
     void OnHeadMove(SocketIOEvent socketIOEvent)
@@ -525,33 +530,6 @@ public class NetworkManager : MonoBehaviour
             playerPosition = new float[] { _playerSpawnPosition.x, _playerSpawnPosition.y, _playerSpawnPosition.z };
             playerRotation = new float[] { _playerSpawnRotation.eulerAngles.x, _playerSpawnRotation.eulerAngles.y, _playerSpawnRotation.eulerAngles.z };
         }
-        /*
-         * public class PositionJSON
-    {
-        public float[] position;
-
-        public PositionJSON(Vector3 _position)
-        {
-            position = new float[] { _position.x, _position.y, _position.z };
-        }
-    }
-         * 
-         *  public class RightHandPositionJSON
-    {
-        public float[] rightHandPosition;
-
-        public RightHandPositionJSON(Vector3 _rightHandPosition)
-        {
-            rightHandPosition = new float[] { _rightHandPosition.x, _rightHandPosition.y, _rightHandPosition.z };
-        }
-    }
-
-        public PlayerJSON(string _name, float[] _playerSpawnPosition, float[] playerSpawnRotation)
-        {
-            playerSpawnPosition = new PointJSON(_playerSpawnPosition);
-            name = _name;
-        }
-        */
     }
 
     [Serializable]
@@ -826,13 +804,40 @@ public class NetworkManager : MonoBehaviour
         public float[] enemyRotation;
         public int health;
 
-        public List<EnemyJSON> enemies;
-
         public static EnemyJSON CreateFromJSON(string data)
         {
             return JsonUtility.FromJson<EnemyJSON>(data);
         }
+
+        public EnemyJSON(string _name, Vector3 _enemyPosition, Quaternion _enemyRotation, int _health)
+        {
+            name = _name;
+            enemyPosition = new float[] { _enemyPosition.x, _enemyPosition.y, _enemyPosition.z };
+            enemyRotation = new float[] { _enemyRotation.eulerAngles.x, _enemyRotation.eulerAngles.y, _enemyRotation.eulerAngles.z };
+            health = _health;
+        }
     }
+
+    /*
+     public class PlayerJSON
+    {
+        public string name;
+        public float[] playerPosition;
+        public float[] playerRotation;
+
+        public static PlayerJSON CreateFromJSON(string data)
+        {
+            return JsonUtility.FromJson<PlayerJSON>(data);
+        }
+
+        public PlayerJSON(string _name, Vector3 _playerSpawnPosition, Quaternion _playerSpawnRotation)
+        {
+            name = _name;
+            playerPosition = new float[] { _playerSpawnPosition.x, _playerSpawnPosition.y, _playerSpawnPosition.z };
+            playerRotation = new float[] { _playerSpawnRotation.eulerAngles.x, _playerSpawnRotation.eulerAngles.y, _playerSpawnRotation.eulerAngles.z };
+        }
+    }
+         * */
 
     [Serializable]
     public class EnemyPositionJSON
