@@ -5,7 +5,6 @@
   https://twitter.com/RiSE_blackbird/status/1188650229207166976  
 
   基本的に下記掲載の動画のチュートリアルに沿って進める。  
-  ※Questと書いているが、現状Android用ではなく、Win用のOpenVRアプリ。  
 
 **動画との主な相違点(注意点)**  
 [ 動画 ] ： [ 今回 ]  
