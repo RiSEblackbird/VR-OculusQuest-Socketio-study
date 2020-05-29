@@ -7,7 +7,8 @@
 ---
 **キャプチャ動画**  
  - 2019-10-28 am  
-  https://twitter.com/RiSE_blackbird/status/1188650229207166976  
+  高画質↓  
+  https://www.youtube.com/watch?v=JubKeeb9RNI  
   Gif画像↓  
   ![VR-Socket-Study](https://user-images.githubusercontent.com/43542677/81929511-1692df00-9622-11ea-9a34-625530357957.gif)
   ---
